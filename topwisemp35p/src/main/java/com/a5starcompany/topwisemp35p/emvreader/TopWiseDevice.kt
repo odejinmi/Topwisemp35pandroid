@@ -29,18 +29,24 @@ class TopWiseDevice(val context: Context, callback: (TransactionMonitor) -> Unit
 
     private val printManager: AidlPrinter? = DeviceTopUsdkServiceManager.instance?.printManager
 
-    fun printDoc(template: PrintTemplate) {
+    fun printDoc(template: PrintTemplate): MutableMap<String, Any> {
+        val map: MutableMap<String, Any> = mutableMapOf()
         printManager?.addRuiImage(template.printBitmap, 0);
         printManager?.printRuiQueue(object : AidlPrinterListener.Stub() {
             override fun onError(p0: Int) {
-//                printListener.onError(p0)
+                map["state"] = "1"
+                map["message"] = "fail"
+                map["status"] = false
             }
 
             override fun onPrintFinish() {
-//                printListener.onPrintFinish()
+                map["state"] = "1"
+                map["message"] = "successful"
+                map["status"] = true
             }
 
         })
+        return map
     }
 
     val serialnumber: String

@@ -637,7 +637,7 @@ class MainActivity : AppCompatActivity() {
 
         template.add(spacetextUnit())
 
-        topWiseDevice.printDoc(template) //perform print operation
+        val resul = topWiseDevice.printDoc(template) //perform print operation
 
     }
     private fun starteodPrint(call: JSONObject) {

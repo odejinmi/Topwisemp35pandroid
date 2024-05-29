@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -33,6 +34,20 @@ android {
 
     lint {
         baseline = file("lint-baseline.xml")
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release"){
+            afterEvaluate{
+                from(components["release"])
+            }
+        }
+//        library(MavenPublication) {
+//            // ... other configurations
+//            artifact(components.release)  // Reference release variant
+//        }
     }
 }
 
