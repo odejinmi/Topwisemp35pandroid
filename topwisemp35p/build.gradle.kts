@@ -40,6 +40,9 @@ android {
 publishing {
     publications {
         register<MavenPublication>("release"){
+            groupId = "com.a5starcompany"
+            artifactId = "topwisemp35p"
+            version = "1.0.2"
             afterEvaluate{
                 from(components["release"])
             }
