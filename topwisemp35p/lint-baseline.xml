@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.2)" variant="all" version="8.2.2">
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        tlvList.addTlv(&quot;DF19&quot;, BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, rdClssFloorLimit)));"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/Aid.java"
+            line="286"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        tlvList.addTlv(&quot;DF20&quot;, BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, rdClssTxnLimit)));"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/Aid.java"
+            line="287"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        tlvList.addTlv(&quot;DF21&quot;, BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, rdCVMLimit)));"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/Aid.java"
+            line="288"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                return bytesToHexString(messageDigest).toUpperCase();"
+        errorLine2="                                                       ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/charackterEncoder/BCDASCII.java"
+            line="58"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                return bytesToHexString(hash).toUpperCase();"
+        errorLine2="                                              ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/charackterEncoder/BCDASCII.java"
+            line="63"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        return ret.toString().toUpperCase();"
+        errorLine2="                              ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/charackterEncoder/BCDASCII.java"
+            line="171"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        return dec.toString(16).toUpperCase();"
+        errorLine2="                                ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/charackterEncoder/BCDASCII.java"
+            line="221"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        return buffer.toString().toUpperCase();"
+        errorLine2="                                 ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/BaseDaoImpl.java"
+            line="532"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="            this.ridindex = new StringBuffer(rid).append(Integer.toHexString(rindex[0] &amp; 0xFF)).toString().toUpperCase();"
+        errorLine2="                                                                                                           ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/Capk.java"
+            line="98"
+            column="108"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="            this.ridindex = new StringBuffer(rid).append(Integer.toHexString(index[0] &amp; 0xFF)).toString().toUpperCase();"
+        errorLine2="                                                                                                          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/Capk.java"
+            line="108"
+            column="107"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        String ridindex = new StringBuffer(rid).append(Integer.toHexString(index &amp; 0xFF)).toString().toUpperCase();"
+        errorLine2="                                                                                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/table/CapkDaoImpl.java"
+            line="40"
+            column="102"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                    combination.setAucRdCVMLmt(BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, aid.getRdCVMLimit())));"
+        errorLine2="                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ClsCardProcess.java"
+            line="713"
+            column="74"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                    combination.setAucRdClssTxnLmt(BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, aid.getRdClssTxnLimit())));"
+        errorLine2="                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ClsCardProcess.java"
+            line="722"
+            column="78"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                    combination.setAucRdClssFLmt(BytesUtil.hexString2Bytes(String.format(&quot;%012d&quot;, aid.getRdClssFloorLimit())));"
+        errorLine2="                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ClsCardProcess.java"
+            line="731"
+            column="76"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        cardNo = cardNo.toUpperCase().replace(&quot;F&quot;, &quot;&quot;);"
+        errorLine2="                        ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ContactCardProcess.java"
+            line="977"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        String s9F02 = String.format(&quot;%012d&quot;, amt);"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ContactCardProcess.java"
+            line="992"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="        String s9F03 = String.format(&quot;%012d&quot;, otherAmt);"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/emv/impl/ContactCardProcess.java"
+            line="993"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        String hex = data.toUpperCase();"
+        errorLine2="                          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/HexUtil.java"
+            line="8"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        return res.toString().toUpperCase();"
+        errorLine2="                              ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/HexUtil.java"
+            line="41"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                .toUpperCase().padStart(16, &apos;0&apos;)"
+        errorLine2="                 ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="58"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                    (Integer.parseInt(b[i].toString(), 16)).toString(16).toUpperCase())"
+        errorLine2="                                                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="84"
+            column="74"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                    (Integer.parseInt(b[i].toString(), 16)).toString(16).toUpperCase())"
+        errorLine2="                                                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="87"
+            column="74"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                    (Integer.parseInt(b[i].toString(), 16))).toString(16).toUpperCase()"
+        errorLine2="                                                                          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="90"
+            column="75"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        message="To get local formatting use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()`, or use `new SimpleDateFormat(String template, Locale locale)` with for example `Locale.US` for ASCII dates."
+        errorLine1="        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;);"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/CommonFunction.java"
+            line="35"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="SimpleDateFormat"
+        message="To get local formatting use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()`, or use `new SimpleDateFormat(String template, Locale locale)` with for example `Locale.US` for ASCII dates."
+        errorLine1="        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd&apos;T&apos;hh:mm:ss&quot;);"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/card/ICPbocStartListenerSub.java"
+            line="310"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="WrongConstant"
+        message="Must be one or more of: Paint.ANTI_ALIAS_FLAG, Paint.FILTER_BITMAP_FLAG, Paint.DITHER_FLAG, Paint.UNDERLINE_TEXT_FLAG, Paint.STRIKE_THRU_TEXT_FLAG, Paint.FAKE_BOLD_TEXT_FLAG, Paint.LINEAR_TEXT_FLAG, Paint.SUBPIXEL_TEXT_FLAG, Paint.EMBEDDED_BITMAP_TEXT_FLAG"
+        errorLine1="            tv.paint.flags = 9"
+        errorLine2="                             ~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="278"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;280dp&quot;"
+        errorLine2="                   ~~~~~">
+        <location
+            file="src/main/res/drawable/homescreen.xml"
+            line="5"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher: Cipher = Cipher.getInstance(&quot;DES/ECB/PKCS5Padding&quot;)"
+        errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="168"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher: Cipher = Cipher.getInstance(&quot;DES/ECB/PKCS5Padding&quot;)"
+        errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="184"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher = Cipher.getInstance(&quot;DESede/ECB/NoPadding&quot;)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="274"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher = Cipher.getInstance(&quot;DESede/ECB/NoPadding&quot;)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="298"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher = Cipher.getInstance(&quot;DESede/ECB/NoPadding&quot;)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="320"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher = Cipher.getInstance(&quot;DESede/ECB/NoPadding&quot;)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="346"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="GetInstance"
+        message="ECB encryption mode should not be used"
+        errorLine1="            val cipher = Cipher.getInstance(&quot;DESede/ECB/NoPadding&quot;)"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/util/encryption.kt"
+            line="379"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkClientTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="libs/TopTool_new.jar"/>
+    </issue>
+
+    <issue
+        id="TrustAllX509TrustManager"
+        message="`checkServerTrusted` is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers">
+        <location
+            file="libs/TopTool_new.jar"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="            cursor = db.rawQuery(sql, null);"
+        errorLine2="                        ~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/database/TableHelper.java"
+            line="204"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 21"
+        errorLine1="        &lt;item name=&quot;android:statusBarColor&quot; tools:targetApi=&quot;l&quot;>@android:color/transparent&lt;/item>"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/theme.xml"
+            line="14"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; SDK_INT is always >= 21"
+        errorLine1="        &lt;item name=&quot;android:statusBarColor&quot; tools:targetApi=&quot;l&quot;>?attr/colorPrimaryVariant&lt;/item>"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/theme.xml"
+            line="34"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="StaticFieldLeak"
+        message="Do not place Android context classes in static fields (static reference to `PrintTemplate` which has field `root` pointing to `LinearLayout`); this is a memory leak"
+        errorLine1="        val instance = PrintTemplate()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="305"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
+        errorLine1="            &lt;LinearLayout"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="15"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/arrow_left.png` in densityless folder">
+        <location
+            file="src/main/res/drawable/arrow_left.png"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/waitingforcard.png` in densityless folder">
+        <location
+            file="src/main/res/drawable/waitingforcard.png"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="22"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                            &lt;ImageView"
+        errorLine2="                             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="120"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                            &lt;ImageView"
+        errorLine2="                             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="139"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                            &lt;ImageView"
+        errorLine2="                             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="158"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                            &lt;ImageView"
+        errorLine2="                             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="177"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        amount.text = &quot;N$mAmount&quot;"
+        errorLine2="                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/activity/PinPadActivity.kt"
+            line="77"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Cash Withdrawal&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Cash Withdrawal&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="33"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Amount&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;Amount&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="62"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;#20,000.00&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;#20,000.00&quot; />"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="70"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;5399 3 **** **** 4102&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;5399 3 **** **** 4102&quot;/>"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="79"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;TOBY-NFC 1&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;TOBY-NFC 1&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="87"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Enter your PIN&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;Enter your PIN&quot; />"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_pin_pad.xml"
+            line="99"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Use &quot;`Gravity.END`&quot; instead of &quot;`Gravity.RIGHT`&quot; to ensure correct behavior in right-to-left locales"
+        errorLine1="            tv.gravity = Gravity.RIGHT"
+        errorLine2="                                 ~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="270"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Use &quot;`Gravity.END`&quot; instead of &quot;`Gravity.RIGHT`&quot; to ensure correct behavior in right-to-left locales"
+        errorLine1="            tv.gravity = Gravity.RIGHT"
+        errorLine2="                                 ~~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="270"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Use &quot;`Gravity.START`&quot; instead of &quot;`Gravity.LEFT`&quot; to ensure correct behavior in right-to-left locales"
+        errorLine1="            tv.gravity = Gravity.LEFT"
+        errorLine2="                                 ~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="272"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Use &quot;`Gravity.START`&quot; instead of &quot;`Gravity.LEFT`&quot; to ensure correct behavior in right-to-left locales"
+        errorLine1="            tv.gravity = Gravity.LEFT"
+        errorLine2="                                 ~~~~">
+        <location
+            file="src/main/java/com/a5starcompany/topwisemp35p/emvreader/printer/PrintTemplate.kt"
+            line="272"
+            column="34"/>
+    </issue>
+
+</issues>

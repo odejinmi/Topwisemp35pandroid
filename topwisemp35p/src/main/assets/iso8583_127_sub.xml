@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 任何属性在不影响解析的情况下都可以不写 -->
+<!--compress=true默认压缩, type为n的域都为BCD类型，变长域长度也要压缩成BCD码-->
+
+<map name="ISO8583_127_sub" compress="false">
+    <!--<field id="0" type=""  desc="PLACEHOLDER"/>-->
+    <field id="1" type="ANS16" desc="BITMAP" />
+    <field id="2" type="ANS..32" desc="SWITCH KEY" />
+    <field id="3" type="ANS48" desc="ROUTING INFORMATION" />
+    <field id="4" type="ANS22" desc="POS DATA" />
+    <field id="5" type="ANS73" desc="SERVICE STATION DATA" />
+    <field id="6" type="N2" desc="AUTHORIZATION PROFILE" />
+    <field id="13" type="N17" desc="POS GEO DATA" />
+    <field id="20" type="N8" desc="ORIGINAL SETTLEMENT DATE" />
+    <field id="25" type="ANS....9999" desc="ICC DATA" />
+    <field id="33" type="N4" desc="EXTENDED TRANSACTION TYPE" />
+</map>

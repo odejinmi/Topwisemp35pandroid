@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 任何属性在不影响解析的情况下都可以不写 -->
+<!--
+     compress=true默认压缩, type为n的域都为BCD类型，变长域长度也要压缩成BCD码
+-->
+<map name="ISO8583_128" compress="false">
+    <field id="MSGTYPE" type="N4" desc="msg_id" />
+    <field id="2" type="N..19" desc="主账号(Primary Account Number)" />
+    <field id="3" type="N6" desc="交易处理码(Transaction Processing Code)" />
+    <field id="4" type="N12" desc="交易金额(Amount Of Transactions)" />
+    <field id="5" type="N12" desc="对账金额(Amount Of Reconciliation)" />
+    <field id="6" type="N12" desc="持卡人账单金额(Amount Of Cardholder Billing)" />
+    <field id="7" type="N10" desc="传输日期和时间(Datetime of Transmission)" />
+    <field id="8" type="N8" desc="持卡人账单费用(Amount Of Cardholder Billing Fee)" />
+    <field id="9" type="N8" desc="对账折算率(Conversion Rate Of Reconciliation)" />
+    <field id="10" type="N8" desc="持卡人账单折算率(Conversion Rate Of Cardholder Billing)" />
+    <field id="11" type="N6" desc="受卡方系统跟踪号(System Trace Audit Number)" />
+    <field id="12" type="N6" desc="受卡方所在地时间(Local Time Of Transaction)" />
+    <field id="13" type="N4" desc="受卡方所在地日期(Local Date Of Transaction)" />
+    <field id="14" type="N4" desc="卡有效期(Date Of Expired)" />
+    <field id="15" type="N4" desc="结算日期(Date Of Settlement)" />
+    <field id="16" type="N4" desc="转换日期(Date Of Conversion)" />
+    <field id="17" type="N4" desc="截获日期(Date Of Capture)" />
+    <field id="18" type="N4" desc="商户类型(Merchant Type)" />
+    <field id="19" type="N3" desc="收单机构国家代码(Country Code Of Acquiring Institution)" />
+    <field id="20" type="N3" desc="主账号国家代码(Country Code Of Primary Account Number)" />
+    <field id="21" type="N3" desc="中转机构国家代码(Country Code Of Forwarding Institution)" />
+    <field id="22" type="N3" align="left"
+        desc="服务点输入方式码(Point Of Service Entry Mode)" />    <!-- NOTE: by default, N is left-padding -->
+    <field id="23" type="N3" align="right" desc="卡序列号(Card Sequence Number)" />
+    <field id="24" type="N3" desc="功能代码(Function Code)" />
+    <field id="25" type="N2" desc="消息原因代码(Message Reason Code)" />
+    <field id="26" type="N2" desc="商户类别代码(Merchant Category Code)" />
+    <field id="27" type="N1" desc="授权码长度(Approval Code Length)" />
+    <field id="28" type="N9" desc="对账BDD日期(Date Of Reconciliation BDD)" />
+    <field id="29" type="N3" desc="对帐指示符BDDn(Reconciliation Indicator BDDn)" />
+    <field id="30" type="N24" desc="原始金额(Original Amount)" />
+    <field id="31" type="ANS..99" desc="收单机构参考数据(Acquirer Reference Data)" />
+    <field id="32" type="N..11" desc="受理机构标识码(Acquiring Institution Identification Code)" />
+    <field id="33" type="N..11" desc="中转机构标识码(Forwarding Institution Identification Code)" />
+    <field id="34" type="ANS..28" desc="扩展主帐号(Extended Primary Account Number)" />
+    <field id="35" type="Z..37" desc="2磁道数据(Track 2 Data)" />
+    <field id="36" type="Z...104" desc="3磁道数据(Track 3 Data)" />
+    <field id="37" type="AN12" desc="检索参考号(Retrieval Reference Number)" />
+    <field id="38" type="AN6" desc="授权码(Approval Code)" />
+    <field id="39" type="N3" desc="应答码(Action Code)" />
+    <field id="40" type="N3" desc="服务代码(Service Code)" />
+    <field id="41" type="ANS8" desc="受卡机终端标识码(Card Acceptor Terminal Identification)" />
+    <field id="42" type="ANS15" desc="受卡方标识码(Card Acceptor Identification Code)" />
+    <field id="43" type="ANS40" desc="受卡方名称和位置(Card Acceptor Name/Location)" />
+    <field id="44" type="ANS..99" desc="附加响应数据(Additional Response Data)" />
+    <field id="45" type="ANS..76" desc="1磁道数据(Track 1)" />
+    <field id="46" type="ANS...204" desc="交易小费信息(Transaction Fees)" />
+    <field id="47" type="ANS...999" desc="附加数据 - 国有(Additional Data - National)" />
+    <field id="48" type="ANS...999" desc="附加数据 - 私有(Additional Data - Private)" />
+    <field id="49" type="N3" desc="交易货币代码(Currency Code Of Transaction)" />
+    <field id="50" type="N3" desc="对账货币代码(Currency Code Of Reconciliation)" />
+    <field id="51" type="N3" desc="持卡人账单货币代码(Currency Code Of Cardholder Billing)" />
+    <field id="52" type="ANS16" desc="个人标识码数据(Encrypted PIN Data)" />
+    <field id="53" type="N..96" desc="安全控制信息(Security Related Control Information)" />
+    <field id="54" type="ANS...360" desc="余额(Additional Amounts)" />
+
+    <field id="55" type="ANS...510"
+        desc="IC卡数据域(Intergrated Circuit Card System Related Data)" />
+    <field id="56" type="ANS...999" desc="原始数据(Original Data)" />
+
+    <field id="57" type="N3" desc="授权生命周期代码(Authorization Life Cycle Code)" />
+    <field id="58" type="N..11"
+        desc="授权代理机构识别码(Authorizing Agent Institution Identification Code)" />
+    <field id="59" type="ANS...999" desc="传输数据(Transport Data)" />
+    <field id="60" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="61" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="62" type="ANS...999" desc="自定义域(Reserved Private)" />
+    <field id="63" type="ANS...999" desc="自定义域(Reserved Private)" />
+    <field id="64" type="ANS16" desc="报文鉴别码(Message Authentication Code)" />
+
+    <field id="65" type="B64" desc="自定义域(Reserved ISO)" />
+    <field id="66" type="ANS...204" desc="原始小费信息(Original Fees)" />
+    <field id="67" type="N2" desc="扩展支付信息(Extended Payment Data)" />
+    <field id="68" type="N3" desc="收单机构国家代码(Country Code Of Receiving Institution)" />
+    <field id="69" type="N3" desc="结算机构国家代码(Country Code Of Settlement Institution)" />
+    <field id="70" type="N3"
+        desc="授权代理机构国家代码(Country Code Of Authorizing Agent Institution)" />
+    <field id="71" type="N8" desc="报文编号(Message Number)" />
+    <field id="72" type="ANS...999" desc="数据记录(Data Record)" />
+    <field id="73" type="N6" desc="操作日期(Date Of Action)" />
+    <field id="74" type="N10" desc="贷记交易笔数(Credits Number)" />
+    <field id="75" type="N10" desc="贷记交易冲正笔数(Credits Reversal Number)" />
+    <field id="76" type="N10" desc="借记交易笔数(Debits Number)" />
+    <field id="77" type="N10" desc="借记交易冲正笔数(Debits Reversal Number)" />
+    <field id="78" type="N10" desc="转账交易笔数(Transfer Number)" />
+    <field id="79" type="N10" desc="转账交易冲正笔数(Transfer Reversal Number)" />
+    <field id="80" type="N10" desc="查询交易笔数(Inquiries Number)" />
+    <field id="81" type="N10" desc="授权交易笔数(Authorization Number)" />
+    <field id="82" type="N10" desc="查询交易冲正笔数(Inquiries Reversal Number)" />
+    <field id="83" type="N10" desc="支付交易笔数(Payments Number)" />
+    <field id="84" type="N10" desc="支付交易冲正笔数(Payments Reversal Number)" />
+    <field id="85" type="N10" desc="收费交易笔数(Payments Number)" />
+    <field id="86" type="N16" desc="贷记交易金额(Credits Amount)" />
+    <field id="87" type="N16" desc="贷记交易冲正金额(Credits Reversal Amount)" />
+    <field id="88" type="N16" desc="借记交易金额(Debits Amount)" />
+    <field id="89" type="N16" desc="借记交易冲正金额(Debits Reversal Amount)" />
+    <field id="90" type="N10" desc="授权交易冲正金额(Authorization Reversal Amount)" />
+    <field id="91" type="N3"
+        desc="交易目的地机构国家代码(Country Code Of Transaction Destination Institution)" />
+    <field id="92" type="N3"
+        desc="交易发起机构国家代码(Country Code Of Transaction Originator Institution)" />
+    <field id="93" type="N..11"
+        desc="交易目的地机构识别码(Transaction Destination Institution Identification Code)" />
+    <field id="94" type="N..11"
+        desc="交易发起机构识别码(Transaction Originator Institution Identification Code)" />
+    <field id="95" type="ANS..99" desc="发卡机构参考数据(Card Issuer Reference Data)" />
+    <field id="96" type="ANS...998" desc="密钥管理数据(Key Management Data)" />
+    <field id="97" type="N17" desc="网络对账金额(Net Reconciliation Amount)" />
+    <field id="98" type="ANS25" desc="收款人(Payee)" />
+    <field id="99" type="AN..11"
+        desc="结算机构识别码(Settlement Institution Identification Code)" />
+    <field id="100" type="N..11" desc="收单机构识别码(Receiving Institution Identification Code)" />
+    <field id="101" type="ANS..17" desc="文件名(File name)" />
+    <field id="102" type="ANS..28" desc="帐户标识1(Account Identification 1)" />
+    <field id="103" type="ANS..28" desc="帐户标识2(Account Identification 2)" />
+    <field id="104" type="ANS...999" desc="交易描述(Transaction Description)" />
+    <field id="105" type="N16" desc="贷记退单金额(Credits Chargeback Amount)" />
+    <field id="106" type="N16" desc="借记退单金额(Debits Chargeback Amount)" />
+    <field id="107" type="N10" desc="贷记退单笔数(Credits Chargeback Number)" />
+    <field id="108" type="N10" desc="借记退单笔数(Debits Chargeback Number)" />
+    <field id="109" type="ANS..84" desc="贷记小费金额(Credits Fee Amounts)" />
+    <field id="110" type="ANS..84" desc="借记小费金额(Debits Fee Amounts)" />
+    <field id="111" type="ANS...999" desc="自定义域(Reserved ISO)" />
+    <field id="112" type="ANS...999" desc="自定义域(Reserved ISO)" />
+    <field id="113" type="ANS...999" desc="自定义域(Reserved ISO)" />
+    <field id="114" type="ANS...999" desc="自定义域(Reserved ISO)" />
+    <field id="115" type="ANS...999" desc="自定义域(Reserved ISO)" />
+    <field id="116" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="117" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="118" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="119" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="120" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="121" type="ANS...999" desc="自定义域(Reserved National)" />
+    <field id="122" type="ANS...999"
+        desc="收单机构附加数据传输域(Acquirer Additional Data Transport Field)" />
+    <field id="123" type="ANS...999"
+        desc="CVC2数据,密码验证结果(CVC2 Data,Cryptography Validation Results)" />
+    <field id="124" type="ANS...999" desc="报表数据(Statement Data)" />
+    <field id="125" type="ANS...999" desc="自定义域(Reserved Private)" />
+    <field id="126" type="ANS...999" desc="自定义域(Reserved Private)" />
+    <field id="127" type="N......999999" desc="自定义域(Reserved Private)" />
+    <field id="128" type="ANS16" desc="报文鉴别码(Message Authentication Code)" />
+</map>
