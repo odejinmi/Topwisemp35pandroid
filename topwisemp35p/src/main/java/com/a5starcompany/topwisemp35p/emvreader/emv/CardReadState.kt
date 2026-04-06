@@ -8,6 +8,7 @@ enum class CardReadState {
     CallBackCanceled,
     CallBackTransResult,
     CardDetected,
+    Printer,
 }
 
 

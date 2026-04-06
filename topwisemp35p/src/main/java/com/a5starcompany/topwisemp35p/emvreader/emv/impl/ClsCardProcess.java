@@ -8,10 +8,7 @@ import android.util.Log;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.Aid;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.DBManager;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvTransData;
 import com.a5starcompany.topwisemp35p.emvreader.emv.OnEmvProcessListener;
-import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.topwise.cloudpos.aidl.emv.level2.AidlAmex;
 import com.topwise.cloudpos.aidl.emv.level2.AidlEntry;
 import com.topwise.cloudpos.aidl.emv.level2.AidlPaypass;
@@ -25,6 +22,10 @@ import com.topwise.cloudpos.aidl.pinpad.AidlPinpad;
 import com.topwise.cloudpos.struct.BytesUtil;
 import com.topwise.cloudpos.struct.Tlv;
 import com.topwise.cloudpos.struct.TlvList;
+import com.a5starcompany.topwisemp35p.emvreader.emv.EmvTransData;
+import com.a5starcompany.topwisemp35p.emvreader.emv.impl.PayDataUtil.CallbackSort;
+import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -62,7 +63,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     private static int aidCount = 0;
     private boolean isEndEmv = false;
     private String mImportAmt = null;
-    private PayDataUtil.CallbackSort mCallbackSort = PayDataUtil.CallbackSort.DEFAULT_MENU;
+    private CallbackSort mCallbackSort = CallbackSort.DEFAULT_MENU;
     private TransParam mTransParam = null;
     private byte cardPayType = -1;
 
@@ -121,7 +122,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     public boolean importAmount(String amt) {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importAmount amt: " + amt);
         if (amt != null && mEmvTransData != null &&
-                mCallbackSort == PayDataUtil.CallbackSort.REQUEST_IMPORT_AMT && mDownLatch != null) {
+                mCallbackSort == CallbackSort.REQUEST_IMPORT_AMT && mDownLatch != null) {
             mImportAmt = amt;
             mAmount = new PayDataUtil().getFixedAmount(amt);
             SDKLog.d(TAG, "amount in data: " + mAmount);
@@ -136,7 +137,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     public boolean importFinalAidSelectRes(boolean res) {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importFinalAidSelectRes" +
                 " res: " + res);
-        if (mDownLatch != null && mCallbackSort == PayDataUtil.CallbackSort.REQUEST_FINAL_AID_SELECT) {
+        if (mDownLatch != null && mCallbackSort == CallbackSort.REQUEST_FINAL_AID_SELECT) {
             mDownLatch.countDown();
             return true;
         }
@@ -148,7 +149,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     public boolean importAidSelectRes(int index) {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importAidSelectRes" +
                 " index: " + index);
-        if (mDownLatch != null && mCallbackSort == PayDataUtil.CallbackSort.REQUEST_AID_SELECT) {
+        if (mDownLatch != null && mCallbackSort == CallbackSort.REQUEST_AID_SELECT) {
             mDownLatch.countDown();
             return true;
         }
@@ -160,7 +161,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     public boolean importPin(String pin) {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importPin" +
                 " pin: " + pin);
-        if (mDownLatch != null && mCallbackSort == PayDataUtil.CallbackSort.REQUEST_IMPORT_PIN) {
+        if (mDownLatch != null && mCallbackSort == CallbackSort.REQUEST_IMPORT_PIN) {
             if (!TextUtils.isEmpty(pin)) {
                 mDownLatch.countDown();
                 return true;
@@ -196,7 +197,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importOnlineResp" +
                 " onlineRes: " + onlineRes + ";respCode: " + respCode + ";icc55: " + icc55);
         SDKLog.d(TAG, "mCallbackSort=" + mCallbackSort);
-        if (mCallbackSort == PayDataUtil.CallbackSort.REQUEST_ONLINE) {
+        if (mCallbackSort == CallbackSort.REQUEST_ONLINE) {
             if (cardPayType == PayDataUtil.KERNTYPE_VISA) {
                 return new PayWaveProcess().scriptProcess(onlineRes, respCode, icc55, mResultListener);
             } else if (cardPayType == PayDataUtil.KERNTYPE_MC) {
@@ -212,7 +213,7 @@ public class ClsCardProcess implements EmvProcessInterface {
     public boolean importConfirmCardInfoRes(boolean res) {
         SDKLog.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importConfirmCardInfoRes" +
                 " res: " + res);
-        if (mDownLatch != null && res && mCallbackSort == PayDataUtil.CallbackSort.REQUEST_CARDINFO_CONFIRM) {
+        if (mDownLatch != null && res && mCallbackSort == CallbackSort.REQUEST_CARDINFO_CONFIRM) {
             mDownLatch.countDown();
             return true;
         }
@@ -246,7 +247,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         //init
         initData();
         if (mEmvTransData.getTransType() != PayDataUtil.CardCode.LKL_BALANCE) {
-            selectCallback(PayDataUtil.CallbackSort.REQUEST_IMPORT_AMT, null, 0);
+            selectCallback(CallbackSort.REQUEST_IMPORT_AMT, null, 0);
         }
         //pre processing
         mTransParam = new TransParam();
@@ -275,13 +276,13 @@ public class ClsCardProcess implements EmvProcessInterface {
             if (res == PayDataUtil.CLSS_USE_CONTACT) {
                 Bundle param = new Bundle();
                 param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_USE_OTHER_INTERFACE);
-                selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, -1);
+                selectCallback(CallbackSort.ON_TRANS_RESULT, param, -1);
             } else {
                 int errorCode = entryL2.getErrorCode();
                 SDKLog.d(TAG, "getErrorCode: " + errorCode);
                 Bundle param = new Bundle();
                 param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_STOP);
-                selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, null, errorCode);
+                selectCallback(CallbackSort.ON_TRANS_RESULT, null, errorCode);
             }
             return PayDataUtil.DEFAULT_RETURN_CODE;
         }
@@ -296,7 +297,7 @@ public class ClsCardProcess implements EmvProcessInterface {
             SDKLog.d(TAG, "getErrorCode: " + errorCode);
             Bundle param = new Bundle();
             param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_STOP);
-            selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, errorCode);
+            selectCallback(CallbackSort.ON_TRANS_RESULT, param, errorCode);
             return PayDataUtil.DEFAULT_RETURN_CODE;
         }
 
@@ -338,7 +339,7 @@ public class ClsCardProcess implements EmvProcessInterface {
             SDKLog.d(TAG, "finalSelect fail!");
             Bundle param = new Bundle();
             param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_USE_OTHER_INTERFACE);
-            selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, -1);
+            selectCallback(CallbackSort.ON_TRANS_RESULT, param, -1);
             return PayDataUtil.DEFAULT_RETURN_CODE;
         }
 
@@ -349,7 +350,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         if (ret != PayDataUtil.EMV_OK) {
             Bundle param = new Bundle();
             param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_STOP);
-            selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, ret);
+            selectCallback(CallbackSort.ON_TRANS_RESULT, param, ret);
             return PayDataUtil.DEFAULT_RETURN_CODE;
         }
 
@@ -446,7 +447,7 @@ public class ClsCardProcess implements EmvProcessInterface {
                 SDKLog.d(TAG, "finalSelect fail!");
                 Bundle param = new Bundle();
                 param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_USE_OTHER_INTERFACE);
-                selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, -1);
+                selectCallback(CallbackSort.ON_TRANS_RESULT, param, -1);
             } else {
                 PreProcResult preProcResult = new PreProcResult();
                 int ret = entryL2.getPreProcResult(preProcResult);
@@ -454,7 +455,7 @@ public class ClsCardProcess implements EmvProcessInterface {
                 if (ret != PayDataUtil.EMV_OK) {
                     Bundle param = new Bundle();
                     param.putInt(PayDataUtil.CardCode.TRANS_RESULT, PayDataUtil.CardCode.TRANS_STOP);
-                    selectCallback(PayDataUtil.CallbackSort.ON_TRANS_RESULT, param, ret);
+                    selectCallback(CallbackSort.ON_TRANS_RESULT, param, ret);
                     return;
                 }
                 SDKLog.d(TAG, "ucKernType: " + ucKernType[0]);
@@ -498,7 +499,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         @Override
         public void onFail(int errorCode) {
             SDKLog.d(TAG, "fail error code: " + errorCode);
-            mCallbackSort = PayDataUtil.CallbackSort.ON_ERROR;
+            mCallbackSort = CallbackSort.ON_ERROR;
             try {
                 mEmvProcessListener.onError(errorCode);
             } catch (RemoteException e) {
@@ -512,11 +513,11 @@ public class ClsCardProcess implements EmvProcessInterface {
                     ";resultValue: " + resultValue);
             try {
                 if (isTransResult) {
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_TRANS_RESULT;
+                    mCallbackSort = CallbackSort.ON_TRANS_RESULT;
                     mEmvProcessListener.onTransResult(resultValue);
                 } else {
                     if (isOnline) {
-                        mCallbackSort = PayDataUtil.CallbackSort.REQUEST_ONLINE;
+                        mCallbackSort = CallbackSort.REQUEST_ONLINE;
                         mEmvProcessListener.onRequestOnline();
                     } else {
                         //TO DO
@@ -528,7 +529,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         }
 
         @Override
-        public void nextTransStep(PayDataUtil.CallbackSort sort, Bundle data) {
+        public void nextTransStep(CallbackSort sort, Bundle data) {
             SDKLog.d(TAG, "nextTransStep CallbackSort: " + sort);
             selectCallback(sort, data, -1);
         }
@@ -676,7 +677,7 @@ public class ClsCardProcess implements EmvProcessInterface {
         List<Aid> mList = db.getAidDao().findAllAid();
         if (mList == null || mList.size() == 0) {
             SDKLog.d(TAG, "aid is null!");
-            selectCallback(PayDataUtil.CallbackSort.ON_ERROR, null, PayDataUtil.CardCode.NO_AID_ERROR);
+            selectCallback(CallbackSort.ON_ERROR, null, PayDataUtil.CardCode.NO_AID_ERROR);
         } else {
             aidCount = mList.size();
             for (Aid aid : mList) {
@@ -753,11 +754,11 @@ public class ClsCardProcess implements EmvProcessInterface {
      * @param index  方法序号
      * @param bundle 传入数据
      */
-    private void selectCallback(PayDataUtil.CallbackSort index, Bundle bundle, int errorCode) {
+    private void selectCallback(CallbackSort index, Bundle bundle, int errorCode) {
         SDKLog.d(TAG, "selectCallback: " + index);
         try {
             if (isEndEmv) {
-                mCallbackSort = PayDataUtil.CallbackSort.ON_TRANS_RESULT;
+                mCallbackSort = CallbackSort.ON_TRANS_RESULT;
                 mEmvProcessListener.onTransResult(PayDataUtil.CardCode.TRANS_STOP);
                 return;
             }
@@ -765,42 +766,42 @@ public class ClsCardProcess implements EmvProcessInterface {
             switch (index) {
                 case REQUEST_IMPORT_AMT:
                     //默认金额类型为授权金额(1)
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_IMPORT_AMT;
+                    mCallbackSort = CallbackSort.REQUEST_IMPORT_AMT;
                     mEmvProcessListener.requestImportAmount(1);
                     mDownLatch.await();
                     break;
                 case REQUEST_FINAL_AID_SELECT:
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_FINAL_AID_SELECT;
+                    mCallbackSort = CallbackSort.REQUEST_FINAL_AID_SELECT;
                     mEmvProcessListener.finalAidSelect();
                     mDownLatch.await();
                     break;
                 case REQUEST_AID_SELECT:
                     int times = bundle.getInt(PayDataUtil.CardCode.IMPORT_AMT_TIMES, 1);
                     String[] aids = bundle.getStringArray(PayDataUtil.CardCode.IMPORT_AMT_AIDS);
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_AID_SELECT;
+                    mCallbackSort = CallbackSort.REQUEST_AID_SELECT;
                     mEmvProcessListener.requestAidSelect(times, aids);
                     mDownLatch.await();
                     break;
                 case REQUEST_TIPS_CONFIRM:
                     //暂时没用
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_TIPS_CONFIRM;
+                    mCallbackSort = CallbackSort.REQUEST_TIPS_CONFIRM;
                     mEmvProcessListener.requestTipsConfirm(null);
                     mDownLatch.await();
                     break;
                 case REQUEST_ECASHTIPS_CONFIRM:
                     //暂时没用
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_ECASHTIPS_CONFIRM;
+                    mCallbackSort = CallbackSort.REQUEST_ECASHTIPS_CONFIRM;
                     mEmvProcessListener.requestEcashTipsConfirm();
                     mDownLatch.await();
                     break;
                 case REQUEST_CARDINFO_CONFIRM:
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_CARDINFO_CONFIRM;
+                    mCallbackSort = CallbackSort.REQUEST_CARDINFO_CONFIRM;
                     String cardNo = bundle.getString(PayDataUtil.CardCode.CARDINFO_CARDNO);
                     mEmvProcessListener.onConfirmCardInfo(cardNo);
                     mDownLatch.await();
                     break;
                 case REQUEST_IMPORT_PIN:
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_IMPORT_PIN;
+                    mCallbackSort = CallbackSort.REQUEST_IMPORT_PIN;
                     int pinType = bundle.getInt(PayDataUtil.CardCode.IMPORT_PIN_TYPE);
                     try {
 
@@ -812,34 +813,34 @@ public class ClsCardProcess implements EmvProcessInterface {
                     break;
                 case REQUEST_USER_AUTH:
                     //暂时没用
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_USER_AUTH;
+                    mCallbackSort = CallbackSort.REQUEST_USER_AUTH;
                     mEmvProcessListener.requestUserAuth(0, null);
                     mDownLatch.await();
                     break;
                 case REQUEST_ONLINE:
-                    mCallbackSort = PayDataUtil.CallbackSort.REQUEST_ONLINE;
+                    mCallbackSort = CallbackSort.REQUEST_ONLINE;
                     mEmvProcessListener.onRequestOnline();
                     break;
                 case ON_OFFLINE_BALANCE:
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_OFFLINE_BALANCE;
+                    mCallbackSort = CallbackSort.ON_OFFLINE_BALANCE;
                     mEmvProcessListener.onReadCardOffLineBalance(null,
                             null, null, null);
                     break;
                 case ON_CARD_TRANSLOG:
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_CARD_TRANSLOG;
+                    mCallbackSort = CallbackSort.ON_CARD_TRANSLOG;
                     mEmvProcessListener.onReadCardTransLog(null);
                     break;
                 case ON_CARD_LOADLOG:
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_CARD_LOADLOG;
+                    mCallbackSort = CallbackSort.ON_CARD_LOADLOG;
                     mEmvProcessListener.onReadCardLoadLog(null, null, null);
                     break;
                 case ON_TRANS_RESULT:
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_TRANS_RESULT;
+                    mCallbackSort = CallbackSort.ON_TRANS_RESULT;
                     int transRes = bundle.getInt(PayDataUtil.CardCode.TRANS_RESULT);
                     mEmvProcessListener.onTransResult(transRes);
                     break;
                 case ON_ERROR:
-                    mCallbackSort = PayDataUtil.CallbackSort.ON_ERROR;
+                    mCallbackSort = CallbackSort.ON_ERROR;
                     mEmvProcessListener.onError(errorCode);
                     break;
                 default:

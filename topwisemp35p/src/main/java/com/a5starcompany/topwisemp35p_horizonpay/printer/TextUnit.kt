@@ -1,4 +1,4 @@
-package com.a5starcompany.topwisemp35p.emvreader.printer
+package com.a5starcompany.topwisemp35p_horizonpay.printer
 
 import android.graphics.Typeface
 
@@ -18,6 +18,8 @@ class TextUnit {
     var lineSpacing: Int
         private set
     var letterSpacing: Int
+        private set
+    var strokeWidth: Float = 0.0f
         private set
 
     constructor(text: String?) {
@@ -60,6 +62,17 @@ class TextUnit {
         this.align = align
     }
 
+    constructor(text: String?, fontSize: Int, align: Align, isBold: Boolean) {
+        this.align = align
+        isUnderline = false
+        isWordWrap = true
+        lineSpacing = 0
+        letterSpacing = 0
+        this.text = text
+        this.fontSize = fontSize
+        this.isBold = isBold
+    }
+
     fun setFontType(fontType: Typeface?): TextUnit {
         this.fontType = fontType
         return this
@@ -77,6 +90,11 @@ class TextUnit {
 
     fun setBold(bold: Boolean): TextUnit {
         isBold = bold
+        return this
+    }
+
+    fun setStrokeWidth(width: Float): TextUnit {
+        this.strokeWidth = width
         return this
     }
 
@@ -100,6 +118,7 @@ class TextUnit {
         isWordWrap = unit.isWordWrap
         lineSpacing = unit.lineSpacing
         letterSpacing = unit.letterSpacing
+        strokeWidth = unit.strokeWidth
     }
 
     object TextSize {
@@ -107,5 +126,6 @@ class TextUnit {
         const val NORMAL = 22
         const val LARGE = 32
         const val XLARGE = 48
+        const val XXLARGE = 56
     }
 }

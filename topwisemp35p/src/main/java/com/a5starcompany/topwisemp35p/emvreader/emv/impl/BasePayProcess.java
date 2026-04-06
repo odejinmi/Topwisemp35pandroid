@@ -8,10 +8,10 @@ import com.a5starcompany.topwisemp35p.emvreader.database.table.Aid;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.Capk;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.DBManager;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.topwise.cloudpos.aidl.emv.level2.AidlEntry;
 import com.topwise.cloudpos.aidl.emv.level2.EmvCapk;
 import com.topwise.cloudpos.struct.BytesUtil;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 
 /**

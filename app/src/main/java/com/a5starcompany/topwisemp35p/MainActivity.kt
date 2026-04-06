@@ -8,14 +8,15 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.a5starcompany.topwisemp35p.emvreader.Datum
-import com.a5starcompany.topwisemp35p.emvreader.Printmodel
-import com.a5starcompany.topwisemp35p.emvreader.TopWiseDevice
+import com.a5starcompany.topwisemp35p_horizonpay.Printmodel
+//import com.a5starcompany.topwisemp35p.emvreader.TopWiseDevice
 import com.a5starcompany.topwisemp35p.emvreader.emv.CardReadState
-import com.a5starcompany.topwisemp35p.emvreader.printer.Align
-import com.a5starcompany.topwisemp35p.emvreader.printer.ImageUnit
+import com.a5starcompany.topwisemp35p_horizonpay.printer.Align
+import com.a5starcompany.topwisemp35p_horizonpay.printer.ImageUnit
 import com.a5starcompany.topwisemp35p.emvreader.printer.PrintTemplate
-import com.a5starcompany.topwisemp35p.emvreader.printer.TextUnit
+import com.a5starcompany.topwisemp35p_horizonpay.Datum
+import com.a5starcompany.topwisemp35p_horizonpay.printer.TextUnit
+import com.a5starcompany.topwisemp35p_horizonpay.Topwisemp35pHorizonpay
 import org.json.JSONObject
 
 
@@ -37,11 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         button = findViewById(R.id.button)
         button!!.setOnClickListener {
-            topWiseDevice.readCard("2000")
+            topWiseDevice.makePayment("2000")
         }
         button2 = findViewById(R.id.button2)
         button2!!.setOnClickListener {
-            topWiseDevice.getCardScheme("2000")
+            topWiseDevice.getcardsheme("2000")
         }
         button3 = findViewById(R.id.button3)
         button3!!.setOnClickListener {
@@ -64,30 +65,30 @@ class MainActivity : AppCompatActivity() {
 
 
     private val topWiseDevice by lazy {
-        TopWiseDevice(applicationContext) { it ->
+        Topwisemp35pHorizonpay(applicationContext) { it ->
             when (it.state) {
                 CardReadState.CallBackCanceled -> {
 //                    emit(EmvUiState.CallBackCanceled)
 
-                    Log.e("Tage","startcustomPrint: call back canceled %s")
+                    Log.e("Tage", "startcustomPrint: call back canceled %s")
                 }
 
                 CardReadState.CallBackError -> {
 //                    emit(EmvUiState.CallBackError(it.errorCode))
 
-                    Log.e("Tage","startcustomPrint: call back error %s")
+                    Log.e("Tage", "startcustomPrint: call back error %s")
                 }
 
                 CardReadState.CallBackTransResult -> {
 //                    emit(EmvUiState.CallBackTransResult)
 
-                    Log.e("Tage","startcustomPrint: call back transresult  %s")
+                    Log.e("Tage", "startcustomPrint: call back transresult  %s")
                 }
 
 
                 CardReadState.CardData -> {
 
-                    Log.e("Tage","startcustomPrint: card data")
+                    Log.e("Tage", "startcustomPrint: card data")
                     if (it.transactionData != null) {
                         it.transactionData!!.applicationPrimaryAccountNumber.let {
                             val numbersOfStars =
@@ -112,36 +113,74 @@ class MainActivity : AppCompatActivity() {
 //                        map1["accountType"] = transactionData.accountType
                         map1["amountAuthorized"] = transactionData.amountAuthorized
                         intent.putExtra("amountAuthorized", transactionData.amountAuthorized)
-                        map1["applicationDiscretionaryData"] = transactionData.applicationDiscretionaryData
-                        intent.putExtra("applicationDiscretionaryData", transactionData.applicationDiscretionaryData)
-                        map1["applicationInterchangeProfile"] = transactionData.applicationInterchangeProfile
-                        intent.putExtra("applicationInterchangeProfile", transactionData.applicationInterchangeProfile)
+                        map1["applicationDiscretionaryData"] =
+                            transactionData.applicationDiscretionaryData
+                        intent.putExtra(
+                            "applicationDiscretionaryData",
+                            transactionData.applicationDiscretionaryData
+                        )
+                        map1["applicationInterchangeProfile"] =
+                            transactionData.applicationInterchangeProfile
+                        intent.putExtra(
+                            "applicationInterchangeProfile",
+                            transactionData.applicationInterchangeProfile
+                        )
                         map1["applicationIssuerData"] = transactionData.applicationIssuerData
-                        intent.putExtra("applicationIssuerData", transactionData.applicationIssuerData)
-                        map1["applicationPANSequenceNumber"] = transactionData.applicationPANSequenceNumber
-                        intent.putExtra("applicationPANSequenceNumber", transactionData.applicationPANSequenceNumber)
-                        map1["applicationPrimaryAccountNumber"] = transactionData.applicationPrimaryAccountNumber
-                        intent.putExtra("applicationPrimaryAccountNumber", transactionData.applicationPrimaryAccountNumber)
-                        map1["applicationTransactionCounter"] = transactionData.applicationTransactionCounter
-                        intent.putExtra("applicationTransactionCounter", transactionData.applicationTransactionCounter)
+                        intent.putExtra(
+                            "applicationIssuerData",
+                            transactionData.applicationIssuerData
+                        )
+                        map1["applicationPANSequenceNumber"] =
+                            transactionData.applicationPANSequenceNumber
+                        intent.putExtra(
+                            "applicationPANSequenceNumber",
+                            transactionData.applicationPANSequenceNumber
+                        )
+                        map1["applicationPrimaryAccountNumber"] =
+                            transactionData.applicationPrimaryAccountNumber
+                        intent.putExtra(
+                            "applicationPrimaryAccountNumber",
+                            transactionData.applicationPrimaryAccountNumber
+                        )
+                        map1["applicationTransactionCounter"] =
+                            transactionData.applicationTransactionCounter
+                        intent.putExtra(
+                            "applicationTransactionCounter",
+                            transactionData.applicationTransactionCounter
+                        )
                         map1["applicationVersionNumber"] = transactionData.applicationVersionNumber
-                        intent.putExtra("applicationVersionNumber", transactionData.applicationVersionNumber)
-                        map1["authorizationResponseCode"] = transactionData.authorizationResponseCode
-                        intent.putExtra("authorizationResponseCode", transactionData.authorizationResponseCode)
+                        intent.putExtra(
+                            "applicationVersionNumber",
+                            transactionData.applicationVersionNumber
+                        )
+                        map1["authorizationResponseCode"] =
+                            transactionData.authorizationResponseCode
+                        intent.putExtra(
+                            "authorizationResponseCode",
+                            transactionData.authorizationResponseCode
+                        )
                         map1["cardHolderName"] = transactionData.cardHolderName
                         intent.putExtra("cardHolderName", transactionData.cardHolderName)
                         map1["cardScheme"] = transactionData.cardScheme
                         intent.putExtra("cardScheme", transactionData.cardScheme)
                         map1["cardSeqenceNumber"] = transactionData.cardSeqenceNumber
                         intent.putExtra("cardSeqenceNumber", transactionData.cardSeqenceNumber)
-                        map1["cardholderVerificationMethod"] = transactionData.cardholderVerificationMethod
-                        intent.putExtra("cardholderVerificationMethod", transactionData.cardholderVerificationMethod)
+                        map1["cardholderVerificationMethod"] =
+                            transactionData.cardholderVerificationMethod
+                        intent.putExtra(
+                            "cardholderVerificationMethod",
+                            transactionData.cardholderVerificationMethod
+                        )
                         map1["cashBackAmount"] = transactionData.cashBackAmount
                         intent.putExtra("cashBackAmount", transactionData.cashBackAmount)
                         map1["cryptogram"] = transactionData.cryptogram
                         intent.putExtra("cryptogram", transactionData.cryptogram)
-                        map1["cryptogramInformationData"] = transactionData.cryptogramInformationData
-                        intent.putExtra("cryptogramInformationData", transactionData.cryptogramInformationData)
+                        map1["cryptogramInformationData"] =
+                            transactionData.cryptogramInformationData
+                        intent.putExtra(
+                            "cryptogramInformationData",
+                            transactionData.cryptogramInformationData
+                        )
                         map1["dedicatedFileName"] = transactionData.dedicatedFileName
                         intent.putExtra("dedicatedFileName", transactionData.dedicatedFileName)
                         map1["deviceSerialNumber"] = transactionData.deviceSerialNumber
@@ -152,14 +191,24 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("expirationDate", transactionData.expirationDate)
                         map1["iccDataString"] = transactionData.iccDataString
                         intent.putExtra("iccDataString", transactionData.iccDataString)
-                        map1["interfaceDeviceSerialNumber"] = transactionData.interfaceDeviceSerialNumber
-                        intent.putExtra("interfaceDeviceSerialNumber", transactionData.interfaceDeviceSerialNumber)
+                        map1["interfaceDeviceSerialNumber"] =
+                            transactionData.interfaceDeviceSerialNumber
+                        intent.putExtra(
+                            "interfaceDeviceSerialNumber",
+                            transactionData.interfaceDeviceSerialNumber
+                        )
                         map1["issuerApplicationData"] = transactionData.issuerApplicationData
-                        intent.putExtra("issuerApplicationData", transactionData.issuerApplicationData)
+                        intent.putExtra(
+                            "issuerApplicationData",
+                            transactionData.issuerApplicationData
+                        )
                         map1["nibssIccSubset"] = transactionData.nibssIccSubset
                         intent.putExtra("nibssIccSubset", transactionData.nibssIccSubset)
                         map1["originalDeviceSerial"] = transactionData.originalDeviceSerial
-                        intent.putExtra("originalDeviceSerial", transactionData.originalDeviceSerial)
+                        intent.putExtra(
+                            "originalDeviceSerial",
+                            transactionData.originalDeviceSerial
+                        )
                         map1["originalPan"] = transactionData.originalPan
                         intent.putExtra("originalPan", transactionData.originalPan)
                         map1["pinBlock"] = transactionData.pinBlock
@@ -171,27 +220,48 @@ class MainActivity : AppCompatActivity() {
                         map1["plainPinKey"] = transactionData.plainPinKey
                         intent.putExtra("plainPinKey", transactionData.plainPinKey)
                         map1["terminalCapabilities"] = transactionData.terminalCapabilities
-                        intent.putExtra("terminalCapabilities", transactionData.terminalCapabilities)
+                        intent.putExtra(
+                            "terminalCapabilities",
+                            transactionData.terminalCapabilities
+                        )
                         map1["terminalCountryCode"] = transactionData.terminalCountryCode
                         intent.putExtra("terminalCountryCode", transactionData.terminalCountryCode)
                         map1["terminalType"] = transactionData.terminalType
                         intent.putExtra("terminalType", transactionData.terminalType)
-                        map1["terminalVerificationResults"] = transactionData.terminalVerificationResults
-                        intent.putExtra("terminalVerificationResults", transactionData.terminalVerificationResults)
+                        map1["terminalVerificationResults"] =
+                            transactionData.terminalVerificationResults
+                        intent.putExtra(
+                            "terminalVerificationResults",
+                            transactionData.terminalVerificationResults
+                        )
                         map1["track2Data"] = transactionData.track2Data
                         intent.putExtra("track2Data", transactionData.track2Data)
                         map1["transactionCurrencyCode"] = transactionData.transactionCurrencyCode
-                        intent.putExtra("transactionCurrencyCode", transactionData.transactionCurrencyCode)
+                        intent.putExtra(
+                            "transactionCurrencyCode",
+                            transactionData.transactionCurrencyCode
+                        )
                         map1["transactionDate"] = transactionData.transactionDate
                         intent.putExtra("transactionDate", transactionData.transactionDate)
-                        map1["transactionSequenceCounter"] = transactionData.transactionSequenceCounter
-                        intent.putExtra("transactionSequenceCounter", transactionData.transactionSequenceCounter)
-                        map1["transactionSequenceNumber"] = transactionData.transactionSequenceNumber
-                        intent.putExtra("transactionSequenceNumber", transactionData.transactionSequenceNumber)
+                        map1["transactionSequenceCounter"] =
+                            transactionData.transactionSequenceCounter
+                        intent.putExtra(
+                            "transactionSequenceCounter",
+                            transactionData.transactionSequenceCounter
+                        )
+                        map1["transactionSequenceNumber"] =
+                            transactionData.transactionSequenceNumber
+                        intent.putExtra(
+                            "transactionSequenceNumber",
+                            transactionData.transactionSequenceNumber
+                        )
                         map1["transactionType"] = transactionData.transactionType
                         intent.putExtra("transactionType", transactionData.transactionType)
                         map1["unifiedPaymentIccData"] = transactionData.unifiedPaymentIccData
-                        intent.putExtra("unifiedPaymentIccData", transactionData.unifiedPaymentIccData)
+                        intent.putExtra(
+                            "unifiedPaymentIccData",
+                            transactionData.unifiedPaymentIccData
+                        )
                         map1["unpredictableNumber"] = transactionData.unpredictableNumber
                         intent.putExtra("unpredictableNumber", transactionData.unpredictableNumber)
 
@@ -200,7 +270,7 @@ class MainActivity : AppCompatActivity() {
                         map["status"] = true
                         map["transactionData"] = map1
 
-                        Log.e("Tage","startcustomPrint: card detected " + map)
+                        Log.e("Tage", "startcustomPrint: card detected $map")
 //            accountType = AccountType.valueOf(data?.getStringExtra(ACCOUNT_TYPE).toString())
 //            readCard()
 
@@ -212,7 +282,7 @@ class MainActivity : AppCompatActivity() {
 
                 CardReadState.CardDetected -> {
 
-                    Log.e("Tage","startcustomPrint: card detected ")
+                    Log.e("Tage", "startcustomPrint: card detected ")
 //                    Toast.makeText(
 //                            binding.activity,
 //                            "amount is required, ",
@@ -239,15 +309,17 @@ class MainActivity : AppCompatActivity() {
 
                 CardReadState.CardReadTimeOut -> {
 
-                    Log.e("Tage","startcustomPrint: card time out")
+                    Log.e("Tage", "startcustomPrint: card time out")
 //                    emit(EmvUiState.CardReadTimeOut)
 
                 }
 
                 CardReadState.Loading -> {
-                    Log.e("Tage","startcustomPrint: loading")
+                    Log.e("Tage", "startcustomPrint: loading")
 //                        showProgressBar(true, "Please insert your card")
                 }
+
+                else -> {}
             }
         }
     }
@@ -255,7 +327,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startPrint(call: JSONObject) {
 
-        Log.e("TAG", "startcustomPrint: ${call}")
+        Log.e("TAG", "startcustomPrint: $call")
 
 //        val bitmap: Bitmap = BitmapFactory.decodeResource(
 //            binding.activity.resources,
@@ -280,16 +352,16 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
 
-        val copytype = call.getString("copytype")!!
+        val copytype = call.getString("copytype")
         template.add(
             TextUnit(
-                copytype + " Copy",
+                "$copytype Copy",
                 TextUnit.TextSize.SMALL,
                 Align.CENTER
             )
                 .setBold(true)
         )
-        val marchantname: String = call.getString("marchantname")!!
+        val marchantname: String = call.getString("marchantname")
         template.add(
             TextUnit(
                 marchantname,
@@ -298,7 +370,7 @@ class MainActivity : AppCompatActivity() {
             )
                 .setBold(true)
         )
-        val marchantaddress: String = call.getString("marchantaddress")!!
+        val marchantaddress: String = call.getString("marchantaddress")
         template.add(
             TextUnit(
                 marchantaddress,
@@ -308,7 +380,7 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
         template.add(starttextUnit())
-        val transactiontype = call.getString("transactiontype")!!
+        val transactiontype = call.getString("transactiontype")
         template.add(
             TextUnit(
                 transactiontype,
@@ -318,16 +390,16 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
 
-        val amount = call.getString("amount")!!
+        val amount = call.getString("amount")
         template.add(
             TextUnit(
-                "₦" + amount,
+                "₦$amount",
                 TextUnit.TextSize.NORMAL,
                 Align.CENTER
             )
                 .setBold(true)
         )
-        val transactionstatus = call.getString("transactionstatus")!!
+        val transactionstatus = call.getString("transactionstatus")
         template.add(
             TextUnit(
                 transactionstatus, TextUnit.TextSize.SMALL, Align.CENTER
@@ -335,7 +407,7 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
         template.add(starttextUnit())
-        val serialno = call.getString("serialno")!!
+        val serialno = call.getString("serialno")
         template.add(
             1,
             TextUnit("Serial No", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -344,7 +416,7 @@ class MainActivity : AppCompatActivity() {
             TextUnit(serialno, TextUnit.TextSize.SMALL, Align.RIGHT)
                 .setBold(true)
         )
-        val terminalid = call.getString("terminalid")!!
+        val terminalid = call.getString("terminalid")
         template.add(
             1,
             TextUnit("Terminal ID", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -353,7 +425,7 @@ class MainActivity : AppCompatActivity() {
             TextUnit(terminalid, TextUnit.TextSize.SMALL, Align.RIGHT)
                 .setBold(true)
         )
-        val rrn = call.getString("rrn")!!
+        val rrn = call.getString("rrn")
         template.add(
             1,
             TextUnit("RRN:", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -505,14 +577,14 @@ class MainActivity : AppCompatActivity() {
                     .setBold(true)
             )
         }
-        val Phonenumber = call.getString("phonenumber")
-        if(Phonenumber != null) {
+        val PhoneNumber = call.getString("phonenumber")
+        if(PhoneNumber != null) {
             template.add(
                 1,
                 TextUnit("Phone Number:", TextUnit.TextSize.SMALL, Align.LEFT)
                     .setBold(true),
                 1,
-                TextUnit(Phonenumber, TextUnit.TextSize.SMALL, Align.RIGHT)
+                TextUnit(PhoneNumber, TextUnit.TextSize.SMALL, Align.RIGHT)
                     .setBold(true)
             )
         }
@@ -604,7 +676,7 @@ class MainActivity : AppCompatActivity() {
                     .setBold(true)
             )
         }
-        val datetime = call.getString("datetime")!!
+        val datetime = call.getString("datetime")
         template.add(
             1,
             TextUnit("DATE & TIME", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -614,7 +686,7 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
         template.add(starttextUnit())
-        val bottommessage = call.getString("bottommessage")!!
+        val bottommessage = call.getString("bottommessage")
         template.add(
             TextUnit(
                 bottommessage,
@@ -624,10 +696,10 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
 
-        val appversion = call.getString("appversion")!!
+        val appversion = call.getString("appversion")
         template.add(
             TextUnit(
-                "App Version "+appversion,
+                "App Version $appversion",
                 TextUnit.TextSize.SMALL,
                 Align.CENTER
             )
@@ -642,13 +714,13 @@ class MainActivity : AppCompatActivity() {
     }
     private fun starteodPrint(call: JSONObject) {
 
-        Log.e("Tage","startcustomPrint: " + call)
+        Log.e("Tage", "startcustomPrint: $call")
 
 //        val bitmap: Bitmap = BitmapFactory.decodeResource(
 //            binding.activity.resources,
 //            R.mipmap.ic_launcher
 //        )ham@gmail.com
-        val base64String: String = call.getString("base64image")!!
+        val base64String: String = call.getString("base64image")
         val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
         val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
 
@@ -666,7 +738,7 @@ class MainActivity : AppCompatActivity() {
             )
                 .setBold(true)
         )
-        val marchantname: String = call.getString("marchantname")!!
+        val marchantname: String = call.getString("marchantname")
         template.add(
             TextUnit(
                 marchantname,
@@ -675,7 +747,7 @@ class MainActivity : AppCompatActivity() {
             )
                 .setBold(true)
         )
-        val marchantaddress: String = call.getString("marchantaddress")!!
+        val marchantaddress: String = call.getString("marchantaddress")
         template.add(
             TextUnit(
                 marchantaddress,
@@ -685,7 +757,7 @@ class MainActivity : AppCompatActivity() {
                 .setBold(true)
         )
         template.add(starttextUnit())
-        val datetime = call.getString("datetime")!!
+        val datetime = call.getString("datetime")
         template.add(
             1,
             TextUnit("DATE", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -729,7 +801,7 @@ class MainActivity : AppCompatActivity() {
 //            )
 //        }
 
-        val totalapproved = call.getString("totalapproved")!!
+        val totalapproved = call.getString("totalapproved")
         template.add(
             1,
             TextUnit("Total Approved", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -738,7 +810,7 @@ class MainActivity : AppCompatActivity() {
             TextUnit(totalapproved, TextUnit.TextSize.SMALL, Align.RIGHT)
                 .setBold(true)
         )
-        val totalfailed = call.getString("totalfailed")!!
+        val totalfailed = call.getString("totalfailed")
         template.add(
             1,
             TextUnit("Total Failed", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -747,7 +819,7 @@ class MainActivity : AppCompatActivity() {
             TextUnit(totalfailed, TextUnit.TextSize.SMALL, Align.RIGHT)
                 .setBold(true)
         )
-        val totalcredit = call.getString("totalcredit")!!
+        val totalcredit = call.getString("totalcredit")
         template.add(
             1,
             TextUnit("Total Credit", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -756,7 +828,7 @@ class MainActivity : AppCompatActivity() {
             TextUnit(totalcredit, TextUnit.TextSize.SMALL, Align.RIGHT)
                 .setBold(true)
         )
-        val totaldebit = call.getString("totaldebit")!!
+        val totaldebit = call.getString("totaldebit")
         template.add(
             1,
             TextUnit("Total Debit", TextUnit.TextSize.SMALL, Align.LEFT)
@@ -774,8 +846,8 @@ class MainActivity : AppCompatActivity() {
     private fun startCustomPrint() {
 
         val marchantname = ""
-        Log.e("Tage","startcustomPrint: " + marchantname)
-        val printmodel = Printmodel.fromJson(marchantname!!)
+        Log.e("Tage", "startcustomPrint: $marchantname")
+        val printmodel = Printmodel.fromJson(marchantname)
         val template: PrintTemplate = PrintTemplate.instance
         template.init(applicationContext, null)
         template.clear()
@@ -821,11 +893,11 @@ class MainActivity : AppCompatActivity() {
             ImageUnit(
                 align(i.align!!) , bitmap, bitmap.width, bitmap.height,
             )
-        } else if (i.imageheight == null && i.imagewidth != null) {
+        } else if (i.imageheight == null) {
             ImageUnit(
                 align(i.align!!) , bitmap, i.imagewidth!!, bitmap.height,
             )
-        } else if (i.imageheight != null && i.imagewidth == null) {
+        } else if (i.imagewidth == null) {
             ImageUnit(
                 align(i.align!!), bitmap, bitmap.width, i.imageheight!!,
             )

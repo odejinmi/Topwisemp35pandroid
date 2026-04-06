@@ -3,47 +3,54 @@ package com.a5starcompany.topwisemp35p.emvreader.printer
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import com.a5starcompany.topwisemp35p.R
+import com.a5starcompany.topwisemp35p_horizonpay.printer.Align
+import com.a5starcompany.topwisemp35p_horizonpay.printer.ImageUnit
+import com.a5starcompany.topwisemp35p_horizonpay.printer.TextUnit
+import com.horizonpay.utils.BaseUtils
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class PrintTemplate {
     private var hasInit = false
     private var root: LinearLayout? = null
     private var context: Context? = null
     private var typeface: Typeface? = null
-    var strokeWidth = 0.0f
     private var templateBitmap: Bitmap? = null
+
+    // Background thread for heavy operations
+    private val backgroundExecutor = Executors.newSingleThreadExecutor()
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     fun init(context: Context?, typeface: Typeface?) {
         if (!hasInit) {
             this.context = context
-            this.root = LinearLayout(context)
-            this.root!!.orientation = LinearLayout.VERTICAL
-            val layoutParams = LinearLayout.LayoutParams(384, -2)
-            this.root!!.layoutParams = layoutParams
-            try {
-                if (typeface == null) {
-//                    this.typeface = Typeface.createFromFile("/system/fonts/NSimSun.ttf")
-                    this.typeface = ResourcesCompat.getFont(this.context!!, R.font.satoshi_medium)
-
-                } else {
-                    this.typeface = typeface
-                }
-            } catch (var5: Exception) {
-                Log.d("PrintTemplate", "font is not exist!")
-                var5.printStackTrace()
+            this.root = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = LinearLayout.LayoutParams(384, -2)
             }
+
+            this.typeface = typeface ?: try {
+//                ResourcesCompat.getFont(context!!, R.font.satoshi_medium)
+                Typeface.createFromAsset(BaseUtils.getApp().assets, "fonts/satoshi_medium.ttf")
+            } catch (e: Exception) {
+                Log.e("PrintTemplate", "Font loading failed", e)
+                Typeface.DEFAULT
+            }
+
             hasInit = true
         }
     }
@@ -53,8 +60,15 @@ class PrintTemplate {
     }
 
     fun add(textUnit: TextUnit) {
-        this.root!!.addView(getPrnTextView(textUnit, 384))
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            mainHandler.post {
+                root?.addView(getPrnTextView(textUnit, 384))
+            }
+        } else {
+            root?.addView(getPrnTextView(textUnit, 384))
+        }
     }
+
     fun add(weight1: Int, textUnit1: TextUnit, weight2: Int, textUnit2: TextUnit) {
         val layout = LinearLayout(context)
         val params = LinearLayout.LayoutParams(384, -2)
@@ -88,15 +102,15 @@ class PrintTemplate {
         this.root!!.addView(layout)
     }
 
-fun add(
-    weight1: Int,
-    textUnit1: TextUnit,
-    weight2: Int,
-    textUnit2: TextUnit,
-    weight3: Int,
-    textUnit3: TextUnit,
-    weight4: Int,
-    textUnit4: TextUnit
+    fun add(
+        weight1: Int,
+        textUnit1: TextUnit,
+        weight2: Int,
+        textUnit2: TextUnit,
+        weight3: Int,
+        textUnit3: TextUnit,
+        weight4: Int,
+        textUnit4: TextUnit
     ) {
         val layout = LinearLayout(context)
         val params = LinearLayout.LayoutParams(384, -2)
@@ -112,18 +126,6 @@ fun add(
         layout.addView(getPrnTextView(textUnit4, width4))
         this.root!!.addView(layout)
     }
-
-//    fun add(
-//        textUnit1: TextUnit
-//    ) {
-//        val layout = LinearLayout(context)
-//        val params = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-//        params.gravity = Gravity.CENTER
-//        layout.layoutParams = params
-//        layout.orientation = LinearLayout.HORIZONTAL
-//        layout.addView(getPrnTextView(textUnit1, 384))
-//        this.root!!.addView(layout)
-//    }
 
     fun add(imageUnit: ImageUnit) {
         val imageView = ImageView(context)
@@ -195,109 +197,201 @@ fun add(
     }
 
     val printBitmap: Bitmap?
-        get() {
-            this.root!!.isDrawingCacheEnabled = true
-            val h = measureHeight(this.root)
-            this.root!!.layout(0, 0, 384, h)
-            if (templateBitmap != null) {
-                templateBitmap!!.recycle()
-                templateBitmap = null
+        get() = runCatching {
+            val h = measureHeight(root!!)
+            root!!.layout(0, 0, 384, h)
+
+            templateBitmap?.recycle()
+            Bitmap.createBitmap(384, h, Bitmap.Config.ARGB_8888).apply {
+                setHasAlpha(true)
+                Canvas(this).apply {
+                    drawColor(Color.WHITE)
+                    root!!.draw(this)
+                }
+                templateBitmap = this
             }
-            templateBitmap = Bitmap.createBitmap(384, h, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(templateBitmap!!)
-            canvas.drawColor(-1)
-            this.root!!.draw(canvas)
-            return templateBitmap
+        }.onFailure {
+            Log.e("PrintTemplate", "Bitmap creation failed", it)
+        }.getOrNull()
+
+
+    // Async version (recommended)
+    fun getPrintBitmapAsync(callback: (Bitmap?) -> Unit) {
+        backgroundExecutor.execute {
+            try {
+                // Get measurements on main thread
+                mainHandler.post {
+                    val h = measureHeight(root!!)
+                    root!!.layout(0, 0, 384, h)
+
+                    // Move bitmap creation back to background
+                    backgroundExecutor.execute {
+                        try {
+                            templateBitmap?.let {
+                                if (!it.isRecycled) it.recycle()
+                            }
+
+                            val bitmap = Bitmap.createBitmap(384, h, Bitmap.Config.ARGB_8888).apply {
+                                setHasAlpha(true)
+                            }
+
+                            val canvas = Canvas(bitmap)
+                            canvas.drawColor(Color.WHITE)
+
+                            // Draw view on main thread
+                            mainHandler.post {
+                                try {
+                                    root!!.draw(canvas)
+                                    templateBitmap = bitmap
+                                    callback(bitmap)
+                                } catch (e: Exception) {
+                                    Log.e("PrintTemplate", "Drawing failed", e)
+                                    callback(null)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("PrintTemplate", "Background bitmap creation failed", e)
+                            mainHandler.post { callback(null) }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("PrintTemplate", "Measurement failed", e)
+                mainHandler.post { callback(null) }
+            }
         }
+    }
 
     fun clear() {
-        if (templateBitmap != null) {
-            templateBitmap!!.recycle()
-            templateBitmap = null
+        // Clear on background thread to avoid blocking UI
+        backgroundExecutor.execute {
+            templateBitmap?.let {
+                if (!it.isRecycled) {
+                    it.recycle()
+                }
+                templateBitmap = null
+            }
+
+            // Clear views on main thread
+            mainHandler.post {
+                unbindResource(this.root)
+            }
         }
-        unbindResource(this.root)
+    }
+
+    // Non-blocking clear version
+    fun clearAsync(callback: (() -> Unit)? = null) {
+        backgroundExecutor.execute {
+            templateBitmap?.let {
+                if (!it.isRecycled) {
+                    it.recycle()
+                }
+                templateBitmap = null
+            }
+
+            // Clear views on main thread
+            mainHandler.post {
+                unbindResource(this.root)
+                callback?.invoke()
+            }
+        }
     }
 
     private fun unbindResource(view: View?) {
         if (view == null) {
             Log.i("PrintTemplate", "view == null")
-        } else {
-            Log.i("PrintTemplate", "unbindResource")
-            if (view is ImageView) {
-                Log.i("PrintTemplate", "recycle")
-                val drawable = view.drawable as BitmapDrawable
-                var bitmap = drawable.bitmap
-                if (bitmap != null) {
-                    bitmap.recycle()
-                    bitmap = null
+            return
+        }
+
+        Log.i("PrintTemplate", "unbindResource")
+
+        when (view) {
+            is ImageView -> {
+                Log.i("PrintTemplate", "Processing ImageView")
+                view.drawable?.let { drawable ->
+                    if (drawable is BitmapDrawable) {
+                        drawable.bitmap?.let { bitmap ->
+                            if (!bitmap.isRecycled) {
+                                // Move bitmap recycling to background thread
+                                backgroundExecutor.execute {
+                                    bitmap.recycle()
+                                }
+                            }
+                        }
+                    }
                 }
+                // Clear the drawable reference immediately
+                view.setImageDrawable(null)
             }
-            if (view is ViewGroup) {
-                Log.i("PrintTemplate", "ViewGroup")
+            is ViewGroup -> {
+                Log.i("PrintTemplate", "Processing ViewGroup with ${view.childCount} children")
+                // Process children first
                 for (i in 0 until view.childCount) {
                     unbindResource(view.getChildAt(i))
                 }
+                // Remove all views in batches to reduce UI thread work
                 view.removeAllViews()
             }
         }
     }
 
-    private fun measureHeight(child: View?): Int {
-        var lp = child!!.layoutParams
-        if (lp == null) {
-            lp = ViewGroup.LayoutParams(-1, -2)
-        }
-        val childMeasureWidth = ViewGroup.getChildMeasureSpec(0, 0, lp.width)
-        val childMeasureHeight: Int
-        childMeasureHeight = if (lp.height > 0) {
-            View.MeasureSpec.makeMeasureSpec(lp.height, View.MeasureSpec.EXACTLY)
-        } else {
+    private fun measureHeight(child: View): Int {
+        child.measure(
+            View.MeasureSpec.makeMeasureSpec(384, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        }
-        child.measure(childMeasureWidth, childMeasureHeight)
+        )
         return child.measuredHeight
     }
 
-
     private fun getPrnTextView(textUnit: TextUnit, width: Int): TextView {
-        val tv = TextView(context)
-        val tvParams = LinearLayout.LayoutParams(width, -2)
-        tvParams.setMargins(0, textUnit.lineSpacing / 2, 0, textUnit.lineSpacing / 2)
-        tv.layoutParams = tvParams
-        if (textUnit.align == Align.CENTER) {
-            tv.gravity = Gravity.CENTER
-        } else if (textUnit.align == Align.RIGHT) {
-            tv.gravity = Gravity.RIGHT
-        } else {
-            tv.gravity = Gravity.LEFT
+        return TextView(context).apply {
+            val tvParams = LinearLayout.LayoutParams(width, -2)
+            tvParams.setMargins(0, textUnit.lineSpacing / 2, 0, textUnit.lineSpacing / 2)
+            layoutParams = tvParams
+
+            gravity = when (textUnit.align) {
+                Align.CENTER -> Gravity.CENTER
+                Align.RIGHT -> Gravity.RIGHT
+                else -> Gravity.LEFT
+            }
+
+            isSingleLine = !textUnit.isWordWrap
+
+            paint.flags = if (textUnit.isUnderline) {
+                Paint.ANTI_ALIAS_FLAG or Paint.UNDERLINE_TEXT_FLAG
+            } else {
+                Paint.ANTI_ALIAS_FLAG
+            }
+
+            paint.isAntiAlias = true
+            paint.style = Paint.Style.FILL_AND_STROKE
+            paint.strokeWidth = textUnit.strokeWidth
+            setTextColor(Color.BLACK)
+
+            val style = if (textUnit.isBold) Typeface.BOLD else Typeface.NORMAL
+
+            when {
+                textUnit.fontType != null -> setTypeface(textUnit.fontType, style)
+                this@PrintTemplate.typeface != null -> setTypeface(this@PrintTemplate.typeface, style)
+                else -> typeface = Typeface.defaultFromStyle(style)
+            }
+
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, textUnit.fontSize.toFloat())
+            letterSpacing = textUnit.letterSpacing.toFloat() / textUnit.fontSize.toFloat()
+            text = textUnit.text
         }
-        if (!textUnit.isWordWrap) {
-            tv.isSingleLine = true
+    }
+
+    fun shutdown() {
+        backgroundExecutor.shutdown()
+        try {
+            if (!backgroundExecutor.awaitTermination(2, TimeUnit.SECONDS)) {
+                backgroundExecutor.shutdownNow()
+            }
+        } catch (e: InterruptedException) {
+            backgroundExecutor.shutdownNow()
+            Thread.currentThread().interrupt()
         }
-        if (textUnit.isUnderline) {
-            tv.paint.flags = 9
-        } else {
-            tv.paint.flags = Paint.ANTI_ALIAS_FLAG
-        }
-        tv.paint.isAntiAlias = true
-        tv.paint.style = Paint.Style.FILL_AND_STROKE
-        tv.paint.strokeWidth = strokeWidth
-        tv.setTextColor(-16777216)
-        var style = Typeface.BOLD
-        if (textUnit.isBold) {
-            style = Typeface.BOLD
-        }
-        if (textUnit.fontType != null) {
-            tv.setTypeface(textUnit.fontType, style)
-        } else if (typeface != null) {
-            tv.setTypeface(typeface, style)
-        } else {
-            tv.typeface = Typeface.defaultFromStyle(style)
-        }
-        tv.setTextSize(0, textUnit.fontSize.toFloat())
-        tv.letterSpacing = textUnit.letterSpacing.toFloat() / textUnit.fontSize.toFloat()
-        tv.text = textUnit.text
-        return tv
     }
 
     companion object {

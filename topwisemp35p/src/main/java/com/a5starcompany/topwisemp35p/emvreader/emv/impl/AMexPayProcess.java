@@ -5,7 +5,6 @@ import android.os.RemoteException;
 
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvManager;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.topwise.cloudpos.aidl.emv.level2.AidlAmex;
 import com.topwise.cloudpos.aidl.emv.level2.EmvCapk;
 import com.topwise.cloudpos.aidl.emv.level2.EmvTerminalInfo;
@@ -13,6 +12,7 @@ import com.topwise.cloudpos.aidl.emv.level2.PreProcResult;
 import com.topwise.cloudpos.aidl.emv.level2.TransParam;
 import com.topwise.cloudpos.struct.BytesUtil;
 import com.topwise.cloudpos.struct.TlvList;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 
 /**

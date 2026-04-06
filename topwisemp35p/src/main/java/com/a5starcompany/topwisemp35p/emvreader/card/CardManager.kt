@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.FragmentTransaction
-import com.a5starcompany.topwisemp35p.emvreader.activity.PinpadDialogFragment
 import com.a5starcompany.topwisemp35p.emvreader.emv.CardReadResult
 import com.a5starcompany.topwisemp35p.emvreader.util.StringUtil
 import com.topwise.cloudpos.aidl.card.AidlCheckCardListener
@@ -268,11 +266,6 @@ class CardManager {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    fun showdialog(supportFragmentManager: FragmentTransaction, tag: String){
-        val pinpadDialog = PinpadDialogFragment.newInstance(1, 3)
-        pinpadDialog.show(supportFragmentManager, tag)
     }
 
     companion object {

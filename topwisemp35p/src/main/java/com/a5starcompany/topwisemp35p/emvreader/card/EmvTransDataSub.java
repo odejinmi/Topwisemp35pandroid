@@ -1,8 +1,8 @@
 package com.a5starcompany.topwisemp35p.emvreader.card;
 
+import com.a5starcompany.topwisemp35p.emvreader.app.PosApplication;
 import com.a5starcompany.topwisemp35p.emvreader.cache.ConsumeData;
 import com.a5starcompany.topwisemp35p.emvreader.util.StringUtil;
-import com.a5starcompany.topwisemp35p.emvreader.app.PosApplication;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvTransData;
 
 public class EmvTransDataSub {

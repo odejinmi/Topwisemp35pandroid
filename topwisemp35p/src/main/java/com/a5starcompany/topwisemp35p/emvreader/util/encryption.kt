@@ -55,7 +55,7 @@ object DukptHelper {
                 continue
             }
             val counterKSN2 = Integer.toHexString(Integer.parseInt(result, 2))
-                .toUpperCase().padStart(16, '0')
+                .uppercase().padStart(16, '0')
             //println("The expected value of the counter ksn 2 is $counterKSN2")
             val newKSN2 = XORorANDorORfunction(newKSNtoleft16, counterKSN2, "|")
             //println("The expected value of the new ksn 2 is $newKSN2")
@@ -81,13 +81,13 @@ object DukptHelper {
         for (i in 0 until a.lastIndex + 1) {
             if (symbol === "|") {
                 result += (Integer.parseInt(a[i].toString(), 16).or
-                    (Integer.parseInt(b[i].toString(), 16)).toString(16).toUpperCase())
+                    (Integer.parseInt(b[i].toString(), 16)).toString(16).uppercase())
             } else if (symbol === "^") {
                 result += (Integer.parseInt(a[i].toString(), 16).xor
-                    (Integer.parseInt(b[i].toString(), 16)).toString(16).toUpperCase())
+                    (Integer.parseInt(b[i].toString(), 16)).toString(16).uppercase())
             } else {
                 result += (Integer.parseInt(a[i].toString(), 16).and
-                    (Integer.parseInt(b[i].toString(), 16))).toString(16).toUpperCase()
+                    (Integer.parseInt(b[i].toString(), 16))).toString(16).uppercase()
             }
         }
         return result
@@ -324,7 +324,7 @@ object TripleDES {
             var dataTemp2 = ByteArray(8)
             var i = 0
             while (i < data.size) {
-                for (j in 0..7) dataTemp1[j] = (data[i + j] xor dataTemp2[j])
+                for (j in 0..7) dataTemp1[j] = (data[i + j] xor dataTemp2[j]) as Byte
                 dataTemp2 = cipher.doFinal(dataTemp1)
                 for (j in 0..7) enc[i + j] = dataTemp2[j]
                 i += 8
@@ -351,7 +351,7 @@ object TripleDES {
             for (i in 0..7) dataTemp2[i] = IV[i]
             var i = 0
             while (i < data.size) {
-                for (j in 0..7) dataTemp1[j] = (data[i + j] xor dataTemp2[j])
+                for (j in 0..7) dataTemp1[j] = (data[i + j] xor dataTemp2[j]) as Byte
                 dataTemp2 = cipher.doFinal(dataTemp1)
                 for (j in 0..7) enc[i + j] = dataTemp2[j]
                 i += 8

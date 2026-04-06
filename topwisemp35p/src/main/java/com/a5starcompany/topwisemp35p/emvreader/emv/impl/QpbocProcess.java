@@ -4,11 +4,8 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDefinition;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvManager;
-import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.topwise.cloudpos.aidl.emv.level2.AidlEntry;
 import com.topwise.cloudpos.aidl.emv.level2.AidlQpboc;
 import com.topwise.cloudpos.aidl.emv.level2.EmvCapk;
@@ -18,6 +15,9 @@ import com.topwise.cloudpos.aidl.emv.level2.QpbocCallback;
 import com.topwise.cloudpos.struct.BytesUtil;
 import com.topwise.cloudpos.struct.Tlv;
 import com.topwise.cloudpos.struct.TlvList;
+import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDefinition;
+import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 import java.util.Map;
 

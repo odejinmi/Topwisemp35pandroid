@@ -3,9 +3,9 @@ package com.a5starcompany.topwisemp35p.emvreader.emv.impl;
 import android.util.Log;
 
 import com.a5starcompany.topwisemp35p.emvreader.database.table.Capk;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.topwise.cloudpos.struct.BytesUtil;
 import com.topwise.cloudpos.struct.TlvList;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

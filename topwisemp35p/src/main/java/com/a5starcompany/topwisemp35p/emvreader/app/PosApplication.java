@@ -1,17 +1,16 @@
 package com.a5starcompany.topwisemp35p.emvreader.app;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.a5starcompany.topwisemp35p.charackterEncoder.BCDASCII;
-import com.a5starcompany.topwisemp35p.emvreader.cache.ConsumeData;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.Processor;
 import com.a5starcompany.topwisemp35p.emvreader.DeviceTopUsdkServiceManager;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.AidDaoImpl;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.DBManager;
+import com.a5starcompany.topwisemp35p.emvreader.emv.EmvManager;
+import com.a5starcompany.topwisemp35p.emvreader.emv.Processor;
+import com.a5starcompany.topwisemp35p.emvreader.cache.ConsumeData;
+import com.a5starcompany.topwisemp35p.charackterEncoder.BCDASCII;
 import com.topwise.cloudpos.aidl.card.AidlCheckCard;
 import com.topwise.cloudpos.aidl.pinpad.AidlPinpad;
 import com.topwise.cloudpos.data.PinpadConstant;
@@ -21,27 +20,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
 public class PosApplication {
     private static final String TAG = "jeremy " + PosApplication.class.getSimpleName();
-    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
-    @SuppressLint("StaticFieldLeak")
     private static PosApplication mPosApplication;
     public ConsumeData mConsumeData;
 
     public static void init(Context activity) {
-        Log.i(TAG,"onCreate");
+        Log.i(TAG, "onCreate");
         mContext = activity;
 
         DBManager.getInstance().init(activity);
-        DeviceTopUsdkServiceManager.Companion.getInstance();
+        DeviceTopUsdkServiceManager.getInstance();
+        mCheckCard = DeviceTopUsdkServiceManager.getInstance().getCheckCard();
         initApp();
     }
 
     public static int CONSUME = 1;
     public static int CARD_SCHEME = 0;
+    private static final int SEARCH_CARD_TIME = 30000;
+    private static AidlCheckCard mCheckCard;
 
+    public static void cancelCheckCard() {
+        Log.i(TAG, "cancelCheckCard()");
+        synchronized (mContext) {
+            try {
+                if (mCheckCard != null) {
+                    mCheckCard.cancelCheckCard();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static PosApplication getApp() {
         mPosApplication = mPosApplication == null ? new PosApplication() : mPosApplication;
         return mPosApplication;
@@ -117,22 +128,24 @@ public class PosApplication {
             if (ins != null && ins.available() != 0x00) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(ins));
-                String line;
+                String line = null;
                 while ((line = br.readLine()) != null) {
                     // 未到达文件末尾
-                    if (line.startsWith("AID")) {
-                        Log.d(TAG,"downLoadParam: AID= %s"+ line.split("=")[1]);
+                    if (null != line) {
+                        if (line.startsWith("AID")) {
+                            Log.d(TAG, "downLoadParam: AID= " + line.split("=")[1]);
 
-                        // 更新AID
-                        updateResult = mPbocManager.updateAID(0x01, line.split("=")[1]);
+                            // 更新AID
+                            updateResult = mPbocManager.updateAID(0x01, line.split("=")[1]);
 
-                    } else { // 更新RID
-                        updateResult = mPbocManager.updateCAPK(0x01, line.split("=")[1]);
-                        Log.d(TAG,"downLoadParam: CAPK= " + line.split("=")[1]);
+                        } else { // 更新RID
+                            updateResult = mPbocManager.updateCAPK(0x01, line.split("=")[1]);
+                            Log.d(TAG, "downLoadParam: CAPK= " + line.split("=")[1]);
 
+                        }
                     }
                 }
-                Log.d(TAG,"downLoadParam: completed");
+                Log.d(TAG, "downLoadParam: completed");
             }
             //}
         } catch (IOException e) {
@@ -144,7 +157,7 @@ public class PosApplication {
 
     private static int downLoadKeys() {
         int result = -1;
-        final AidlPinpad pinpadManager = DeviceTopUsdkServiceManager.Companion.getInstance().getPinpadManager(0);
+        final AidlPinpad pinpadManager = DeviceTopUsdkServiceManager.getInstance().getPinpadManager(0);
 
         try {
             boolean rootFlag = pinpadManager.getKeyState(PinpadConstant.KeyType.KEYTYPE_ROOT, 0);
@@ -155,7 +168,7 @@ public class PosApplication {
             boolean pekFlag = pinpadManager.getKeyState(PinpadConstant.KeyType.KEYTYPE_PEK, 0);
             boolean makFlag = pinpadManager.getKeyState(PinpadConstant.KeyType.KEYTYPE_MAK, 0);
             if (pekFlag && makFlag) {
-                Log.v("MainPageActivity","已经有秘钥了");
+                Log.v("MainPageActivity", "已经有秘钥了");
                 result = 0;
 
             } else {

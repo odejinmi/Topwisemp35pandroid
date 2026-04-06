@@ -47,15 +47,10 @@ publishing {
                 from(components["release"])
             }
         }
-//        library(MavenPublication) {
-//            // ... other configurations
-//            artifact(components.release)  // Reference release variant
-//        }
     }
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation(fileTree("libs") { include("*.jar") })
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -63,4 +58,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     implementation("com.beust:klaxon:5.6")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    
+    // Networking and JSON
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.10.1")
 }

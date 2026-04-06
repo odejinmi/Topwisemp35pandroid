@@ -1,6 +1,5 @@
 package com.a5starcompany.topwisemp35p.emvreader
 
-import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -35,13 +34,13 @@ class DeviceTopUsdkServiceManager {
         private set
     private var mBindResult = false
     private fun bindDeviceService(): Boolean {
-        Log.i("topwise","")
+        Log.i("topwise", "")
         val intent = Intent()
         intent.action = ACTION_DEVICE_SERVICE
         intent.setClassName(DEVICE_SERVICE_PACKAGE_NAME, DEVICE_SERVICE_CLASS_NAME)
         try {
             val bindResult = mContext!!.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
-            Log.i("topwise","bindResult = "+ bindResult)
+            Log.i("topwise", "bindResult = $bindResult")
             return bindResult
         } catch (e: Exception) {
             e.printStackTrace()
@@ -50,23 +49,23 @@ class DeviceTopUsdkServiceManager {
     }
 
     fun unBindDeviceService() {
-        Log.i("topwise","")
+        Log.i("topwise", "")
         try {
             mContext!!.unbindService(mConnection)
         } catch (e: Exception) {
-            Log.i("topwise","unbind DeviceService service failed : " + e)
+            Log.i("topwise", "unbind DeviceService service failed : $e")
         }
     }
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, service: IBinder) {
             deviceService = AidlDeviceService.Stub.asInterface(service)
-            Log.i("topwise","onServiceConnected  : "+ deviceService)
+            Log.i("topwise", "onServiceConnected  :  " + deviceService)
             EmvDeviceManager.getInstance().init(deviceService)
         }
 
         override fun onServiceDisconnected(componentName: ComponentName) {
-            Log.i("topwise","onServiceDisconnected  :  "+ deviceService)
+            Log.i("topwise", "onServiceDisconnected  :  " + deviceService)
             deviceService = null
         }
     }
@@ -338,12 +337,11 @@ class DeviceTopUsdkServiceManager {
         private const val DEVICE_SERVICE_CLASS_NAME =
             "com.android.topwise.topusdkservice.service.DeviceService"
         private const val ACTION_DEVICE_SERVICE = "topwise_cloudpos_device_service"
-        @SuppressLint("StaticFieldLeak")
         private var mDeviceServiceManager: DeviceTopUsdkServiceManager? = null
         fun getmDeviceServiceManager() {
             synchronized(DeviceTopUsdkServiceManager::class.java) {
                 mDeviceServiceManager = DeviceTopUsdkServiceManager()
-                Log.d("topwise","gz mDeviceServiceManager: "+ mDeviceServiceManager)
+                Log.d("topwise", "gz mDeviceServiceManager: " + mDeviceServiceManager)
                 mDeviceServiceManager!!.mContext = PosApplication.getApp().context
                 mDeviceServiceManager!!.mBindResult = mDeviceServiceManager!!.bindDeviceService()
             }
@@ -352,7 +350,7 @@ class DeviceTopUsdkServiceManager {
         @JvmStatic
         val instance: DeviceTopUsdkServiceManager?
             get() {
-                Log.d("topwise","mDeviceServiceManager: "+ mDeviceServiceManager)
+                Log.d("topwise", "mDeviceServiceManager: " + mDeviceServiceManager)
                 if (null == mDeviceServiceManager) {
                     synchronized(DeviceTopUsdkServiceManager::class.java) {
                         if (null == mDeviceServiceManager) {

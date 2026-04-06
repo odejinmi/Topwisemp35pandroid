@@ -7,12 +7,8 @@ import android.util.Log;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.Aid;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.Capk;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.DBManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDefinition;
 import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvTransData;
 import com.a5starcompany.topwisemp35p.emvreader.emv.OnEmvProcessListener;
-import com.a5starcompany.topwisemp35p.emvreader.util.AmountUtil;
-import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
 import com.topwise.cloudpos.aidl.emv.level2.AidlEmvL2;
 import com.topwise.cloudpos.aidl.emv.level2.EmvCallback;
 import com.topwise.cloudpos.aidl.emv.level2.EmvCandidateItem;
@@ -23,9 +19,14 @@ import com.topwise.cloudpos.aidl.pinpad.AidlPinpad;
 import com.topwise.cloudpos.struct.BytesUtil;
 import com.topwise.cloudpos.struct.Tlv;
 import com.topwise.cloudpos.struct.TlvList;
+import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDefinition;
+import com.a5starcompany.topwisemp35p.emvreader.emv.EmvTransData;
+import com.a5starcompany.topwisemp35p.emvreader.util.AmountUtil;
+import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /*
  *
@@ -90,9 +91,12 @@ public class ContactCardProcess implements EmvProcessInterface {
 
     private void countDownLatchAwait() {
         try {
-            countDownLatch.await();
+            if (!countDownLatch.await(30, TimeUnit.SECONDS)) {  // 30 second timeout
+                Log.e(TAG, "Timeout waiting for countdown latch");
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();  // Restore interrupted status
+            Log.e(TAG, "Interrupted while waiting for countdown latch", e);
         }
     }
 
@@ -130,25 +134,39 @@ public class ContactCardProcess implements EmvProcessInterface {
          */
         @Override
         public int cGetOnlinePin(boolean b, byte[] bytes, int i, boolean[] booleans) throws RemoteException {
-            Log.d(TAG, CommonFunction._FILE_LINE_FUN_() + "cGetOnlinePin");
-            Log.d(TAG, "Is allow PIN entry bypass: " + b);
-            Log.d(TAG, "PAN: " + BytesUtil.bytes2HexString(bytes));
-            Log.d(TAG, "PAN length: " + i);
+            Log.d(TAG, "cGetOnlinePin called, allow bypass: " + b);
+            try {
+                Log.d(TAG, "Requesting PIN entry...");
+                countDownLatchNew();
+                emvListener.requestImportPin(PayDataUtil.PINTYPE_ONLINE, false, importFixedAmount, 3);
 
-            countDownLatchNew();
-            emvListener.requestImportPin(PayDataUtil.PINTYPE_ONLINE, false, importFixedAmount, 3);
-            countDownLatchAwait();
-            if ((importPinStr == null) || (importPinStr.equals(""))) {
+                // Log before await
+                Log.d(TAG, "Waiting for PIN entry...");
+                if (!countDownLatch.await(30, TimeUnit.SECONDS)) {
+                    Log.e(TAG, "PIN entry timeout");
+                    return 0;
+                }
+
+                if ((importPinStr == null) || (importPinStr.isEmpty())) {
+                    Log.e(TAG, "No PIN entered or empty PIN");
+                    return 0;
+                }
+
+                Log.d(TAG, "PIN entered successfully");
+                if (importPinStr.equals("bypass")) {
+                    booleans[0] = true;
+                } else {
+                    booleans[0] = false;
+                }
+                return 1;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                Log.e(TAG, "Interrupted while waiting for PIN", e);
                 return 0;
+            } finally {
+                Log.d(TAG, "PIN entry flow completed");
+                countDownLatchdDown();
             }
-
-            Log.d(TAG, "cGetOnlinePin, importPinStr: " + importPinStr);
-            if (importPinStr.equals("bypass")) {
-                booleans[0] = true;
-            } else {
-                booleans[0] = false;
-            }
-            return 1;
         }
 
         /***
@@ -1338,14 +1356,20 @@ public class ContactCardProcess implements EmvProcessInterface {
 
     @Override
     public boolean importPin(String pin) {
-        Log.d(TAG, CommonFunction._FILE_LINE_FUN_() + "importPin pin: " + pin);
-        if (pin == null) {
-            endEmv();
-            return false;
+        Log.d(TAG, "importPin called with pin: " + (pin != null ? "***" : "null"));
+        try {
+            if (pin == null || pin.isEmpty()) {
+                Log.e(TAG, "Empty PIN provided");
+                endEmv();
+                return false;
+            }
+            importPinStr = pin;
+            Log.d(TAG, "PIN set successfully");
+            return true;
+        } finally {
+            Log.d(TAG, "Releasing countdown latch");
+            countDownLatchdDown();
         }
-        importPinStr = pin;
-        countDownLatchdDown();
-        return true;
     }
 
     @Override

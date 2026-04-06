@@ -1,4 +1,4 @@
-package com.a5starcompany.topwisemp35p.emvreader.printer
+package com.a5starcompany.topwisemp35p_horizonpay.printer
 
 import android.graphics.Bitmap
 import android.graphics.Rect

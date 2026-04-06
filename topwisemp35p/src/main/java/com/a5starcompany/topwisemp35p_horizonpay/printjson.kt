@@ -1,4 +1,4 @@
-package com.a5starcompany.topwisemp35p.emvreader
+package com.a5starcompany.topwisemp35p_horizonpay
 
 // To parse the JSON, install Klaxon and do:
 //
@@ -37,7 +37,6 @@ sealed class Data {
     public fun toJson(): String = klaxon.toJsonString(when (this) {
         is DatumArrayValue -> this.value
         is StringValue     -> this.value
-        else -> {}
     })
 
     companion object {

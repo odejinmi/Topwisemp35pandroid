@@ -1,4 +1,4 @@
-package com.a5starcompany.topwisemp35p.emvreader
+package com.a5starcompany.topwisemp35p_horizonpay
 
 import com.beust.klaxon.*
 

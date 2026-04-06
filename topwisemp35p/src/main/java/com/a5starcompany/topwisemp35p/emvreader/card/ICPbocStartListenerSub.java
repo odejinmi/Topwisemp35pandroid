@@ -7,21 +7,15 @@ import static com.a5starcompany.topwisemp35p.emvreader.util.EncryptionKt.KSN_LIV
 import android.content.*;
 import android.os.*;
 import android.util.*;
-
-import androidx.fragment.app.FragmentTransaction;
-
+import com.a5starcompany.topwisemp35p.charackterEncoder.BCDASCII;
+//import com.a5starcompany.topwisemp35p.emvreader.activity.PinpadActivity;
+import com.a5starcompany.topwisemp35p.emvreader.app.PosApplication;
 import com.a5starcompany.topwisemp35p.emvreader.cache.ConsumeData;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvDeviceManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.EmvManager;
-import com.a5starcompany.topwisemp35p.emvreader.emv.OnEmvProcessListener;
+import com.a5starcompany.topwisemp35p.emvreader.emv.CardReadResult;
+import com.a5starcompany.topwisemp35p.emvreader.emv.Processor;
 import com.a5starcompany.topwisemp35p.emvreader.util.DukptHelper;
 import com.a5starcompany.topwisemp35p.emvreader.util.Format;
 import com.a5starcompany.topwisemp35p.emvreader.util.StringUtil;
-import com.a5starcompany.topwisemp35p.charackterEncoder.BCDASCII;
-import com.a5starcompany.topwisemp35p.emvreader.activity.PinpadActivity;
-import com.a5starcompany.topwisemp35p.emvreader.app.PosApplication;
-import com.a5starcompany.topwisemp35p.emvreader.emv.CardReadResult;
-import com.a5starcompany.topwisemp35p.emvreader.emv.Processor;
 import com.topwise.cloudpos.aidl.emv.*;
 import com.topwise.cloudpos.aidl.emv.level2.*;
 import com.a5starcompany.topwisemp35p.emvreader.emv.*;
@@ -37,7 +31,6 @@ public class ICPbocStartListenerSub implements OnEmvProcessListener {
     private static final String TAG = StringUtil.TAGPUBLIC + ICPbocStartListenerSub.class.getSimpleName();
 
     private Context mContext;
-    private FragmentTransaction msupportFragmentManager;
     private EmvManager mPbocManager;
     private boolean isOnline = false;
 
@@ -46,9 +39,8 @@ public class ICPbocStartListenerSub implements OnEmvProcessListener {
 
     AidlEmvL2 aidlEmvL2 = EmvDeviceManager.getInstance().getEmvL2();
 
-    public ICPbocStartListenerSub(Context context, FragmentTransaction supportFragmentManager) {
+    public ICPbocStartListenerSub(Context context) {
         mContext = context;
-        msupportFragmentManager = supportFragmentManager;
         mPbocManager = EmvManager.getInstance();
         CardManager.Companion.getInstance().initCardResultCallBack(callBack);
     }
@@ -257,11 +249,8 @@ public class ICPbocStartListenerSub implements OnEmvProcessListener {
 
             }
         }
-            if (msupportFragmentManager == null) {
-                CardManager.Companion.getInstance().startActivity(mContext, bundle, PinpadActivity.class);
-            }else {
-                CardManager.Companion.getInstance().showdialog(msupportFragmentManager, "PinpadDialog");
-            }
+        CardManager.Companion.getInstance().cardDetected(PosApplication.getApp().mConsumeData.getCardno());
+//        CardManager.Companion.getInstance().startActivity(mContext, bundle, PinpadActivity.class);
 
     }
 
@@ -935,6 +924,7 @@ public class ICPbocStartListenerSub implements OnEmvProcessListener {
         byte[] temp = new byte[track2TlvList.length - 2];
         System.arraycopy(track2TlvList, 2, temp, 0, temp.length);
         String track2 = processTrack2(BCDASCII.bytesToHexString(track2TlvList));
+        Log.d(TAG, "setTrack2: topwise result "+track2);
         track2 = track2.substring(4);
         PosApplication.getApp().mConsumeData.setSecondTrackData(track2);
         Log.i(TAG, "getTrack2() " + track2);
@@ -1111,7 +1101,7 @@ public class ICPbocStartListenerSub implements OnEmvProcessListener {
         for (String tag : tags) {
             byte[] tempByte = mPbocManager.getTlv(tag);
             String strResult = BCDASCII.bytesToHexString(tempByte);
-            Log.d(TAG, "temp: " + strResult);
+            Log.d(TAG, "temp: topwise " + strResult);
             sb.append(strResult);
         }
         return BCDASCII.hexStringToBytes(sb.toString());

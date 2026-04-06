@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
-        android:name=".emvreader.PosApp">
-
+        android:name="com.a5starcompany.topwisemp35p_horizonpay.PosApp">
         <service
-            android:name=".emvreader.card.CardMoniterService"
+            android:name="com.a5starcompany.topwisemp35p.emvreader.card.CardMoniterService"
             android:enabled="true" />
-
-        <activity
-            android:theme="@style/Theme.Paylony"
-            android:name=".emvreader.activity.PinpadActivity"
-            android:exported="true" />
 
     </application>
 </manifest>

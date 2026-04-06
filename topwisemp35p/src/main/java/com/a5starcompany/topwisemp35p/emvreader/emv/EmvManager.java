@@ -3,13 +3,13 @@ package com.a5starcompany.topwisemp35p.emvreader.emv;
 import android.os.RemoteException;
 
 import com.a5starcompany.topwisemp35p.emvreader.card.CardType;
-import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
-import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 import com.a5starcompany.topwisemp35p.emvreader.database.table.DBManager;
 import com.topwise.cloudpos.aidl.emv.level2.EmvTerminalInfo;
 import com.a5starcompany.topwisemp35p.emvreader.emv.impl.ClsCardProcess;
 import com.a5starcompany.topwisemp35p.emvreader.emv.impl.ContactCardProcess;
 import com.a5starcompany.topwisemp35p.emvreader.emv.impl.EmvProcessInterface;
+import com.a5starcompany.topwisemp35p.emvreader.util.CommonFunction;
+import com.a5starcompany.topwisemp35p.emvreader.util.SDKLog;
 
 
 public class EmvManager implements EmvProcessInterface {
